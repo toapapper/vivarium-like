@@ -1,0 +1,48 @@
+Bana
+    Rutnät
+    Lista med entities.
+    Lista med items.
+    GetItemMetod(id)
+    GetEntityMetod(id)
+    MoveEntity(id, direction)
+        MoveEntity ska asså flytta en entity åt en riktning. Grejen är dock att den inte bara ska teleporteras, den ska flyttas gradvis ditåt.
+
+    Draw(Camera)
+
+    Static LoadFromFile
+
+Rutnät
+    Ruta[][];
+    Draw(Camera)
+
+Ruta
+    int x, y
+    int OccupyingEntity
+    int[] items
+
+    Kan finnas en entity per ruta endast.
+    Kan finnas fler än ett item per ruta.
+
+Entity 
+    id
+    ruta
+    position
+
+
+Camera
+    constructor(context)
+    viewRect
+    position
+    GetViewporttoWorldPosition
+    GetViewporttoWorldSize
+    DrawImage(x,y,height,width,layer)
+
+
+
+
+Entities ska kunna attackera entities som är i närliggande rutor(inkl diagonala) ska kunna äta saker en ruta bort också
+De har en simpel syn-range som deras decisiontree kan göra beslut på.
+Minne? Större minne>större huvud, dyrare att föda.
+Samma med storlek på beslutsträdet kanske?
+
+Ska kunna ladda ett beslutsträd från antingen en simpel sträng av siffror eller en json-fil
