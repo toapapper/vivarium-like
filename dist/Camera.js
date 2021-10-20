@@ -1,4 +1,4 @@
-import { Rectangle } from "./Maths.js";
+import { Vector2, Rectangle } from "./Maths.js";
 import { Color } from "./ImageUtils.js";
 export class Camera {
     constructor(context, resolution) {
@@ -38,6 +38,13 @@ export class Camera {
         });
         this.drawCalls = [];
     }
+    Move(towards) {
+        this.viewPort.position = this.viewPort.position.add(towards);
+    }
+    Zoom(amount) {
+        let ratio = this.viewPort.height / this.viewPort.width;
+        this.viewPort.size = new Vector2(this.viewPort.width + amount, this.viewPort.height + amount * ratio);
+    }
     WorldToViewPortRect(rect) {
         let outRect = new Rectangle(0, 0, 0, 0);
         outRect.position = this.WorldToViewPortPoint(rect.position);
@@ -46,7 +53,8 @@ export class Camera {
     }
     /** world to pixel position */
     WorldToViewPortPoint(vector) {
-        let outVector = vector.multiply(this.scale);
+        let outVector = vector.subtract(this.viewPort.position);
+        outVector = outVector.multiply(this.scale);
         outVector = outVector.add(this.resolution.divide(2));
         return outVector;
     }

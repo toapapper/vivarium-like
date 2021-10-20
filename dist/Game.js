@@ -12,6 +12,7 @@ let tintedImg = new Image();
 let testImg = new Image();
 testImg.src = "./sprites/bear.png";
 let testCreature;
+let testCreature2;
 testImg.onload = function () {
     camera.DrawImage(testImg, new Rectangle(0, 0, 1, 1));
     testCreature = new Creature(new Vector2(-3, 4), testImg, new Color(0, 255, 255));
@@ -19,8 +20,25 @@ testImg.onload = function () {
 setInterval(function () {
     testCreature.draw(camera);
     camera.Update();
-}, 16);
+}, 32);
 document.addEventListener("keydown", function (event) {
-    console.log(event.key);
+    if (event.key === "a") {
+        camera.Move(Vector2.left);
+    }
+    else if (event.key === "d") {
+        camera.Move(Vector2.right);
+    }
+    else if (event.key === "w") {
+        camera.Move(Vector2.up);
+    }
+    else if (event.key === "s") {
+        camera.Move(Vector2.down);
+    }
+    else if (event.key === "z") {
+        camera.Zoom(1);
+    }
+    else if (event.key === "x") {
+        camera.Zoom(-1);
+    }
 });
 //# sourceMappingURL=Game.js.map

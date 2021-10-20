@@ -58,6 +58,17 @@ export class Camera{
         this.drawCalls = [];
     }
 
+    Move(towards:Vector2){
+        this.viewPort.position = this.viewPort.position.add(towards);
+    }
+
+    Zoom(amount:number){
+        let ratio:number = this.viewPort.height/this.viewPort.width;
+        this.viewPort.size = new Vector2(this.viewPort.width + amount, this.viewPort.height + amount * ratio);
+
+        
+    }
+
     WorldToViewPortRect(rect: Rectangle): Rectangle{
         let outRect: Rectangle = new Rectangle(0,0,0,0);
 
@@ -69,7 +80,9 @@ export class Camera{
 
     /** world to pixel position */
     WorldToViewPortPoint(vector: Vector2): Vector2{
-        let outVector = vector.multiply(this.scale);
+        let outVector = vector.subtract(this.viewPort.position);
+
+        outVector = outVector.multiply(this.scale);
         outVector = outVector.add(this.resolution.divide(2));
 
         return outVector;
