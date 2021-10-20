@@ -12,6 +12,23 @@ export class Color {
     static get white() { return new Color(255, 255, 255); }
     static get black() { return new Color(0, 0, 0); }
     static get magenta() { return new Color(255, 0, 255); }
+    static fromHex(hex) {
+        let color = new Color(0, 0, 0);
+        //copy pasted from https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        color.r = parseInt(result[1], 16);
+        color.g = parseInt(result[2], 16);
+        color.b = parseInt(result[3], 16);
+        return color;
+    }
+    toHex() {
+        //copy pasted from https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+        function componentToHex(c) {
+            var hex = c.toString(16);
+            return hex.length == 1 ? "0" + hex : hex;
+        }
+        return "#" + componentToHex(this.r) + componentToHex(this.g) + componentToHex(this.b);
+    }
     /** if the array is invalid it returns magenta #ff00ff */
     static fromArray(array, startIndex = 0) {
         let color = new Color(0, 0, 0, 0);
@@ -45,9 +62,15 @@ export function TintImage(image, color) {
     imgCanvas.height = image.height;
     imgCanvasContext.drawImage(image, 0, 0, image.width, image.height);
     let imgData = imgCanvasContext.getImageData(0, 0, image.width, image.height);
-    for (let i = 0; i < imgData.data.length; i + 4) {
+    console.log(imgData.data);
+    for (let i = 0; i < imgData.data.length; i += 4) {
+        console.log(imgData.data[i + 3]);
         if (imgData.data[i + 3] > 0) { //if not totally transparent
+            console.log(imgData.data[i]);
+            console.log(imgData.data[i + 1]);
+            console.log(imgData.data[i + 2]);
             if (imgData.data[i] == 255 && imgData.data[i + 1] == 255 && imgData.data[i + 2] == 255) {
+                console.log(color);
                 imgData.data[i] = color.r;
                 imgData.data[i + 1] = color.g;
                 imgData.data[i + 2] = color.b;
