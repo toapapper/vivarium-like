@@ -42,8 +42,12 @@ export class Camera {
         this.viewPort.position = this.viewPort.position.add(towards);
     }
     Zoom(amount) {
+        //Limit so you cant zoom close enough that your viewport size is 0,0
+        if ((this.viewPort.size.x <= 1 || this.viewPort.size.y <= 1) && Math.sign(amount) > 0) {
+            return;
+        }
         let ratio = this.viewPort.height / this.viewPort.width;
-        this.viewPort.size = new Vector2(this.viewPort.width + amount, this.viewPort.height + amount * ratio);
+        this.viewPort.size = new Vector2(this.viewPort.width - amount, this.viewPort.height - amount * ratio);
     }
     WorldToViewPortRect(rect) {
         let outRect = new Rectangle(0, 0, 0, 0);

@@ -15,7 +15,7 @@ export class Vector2{
     get intY(): number{ return Math.round(this.y); }
     set intY(value:number){ this.y = Math.round(value); }
     
-    constructor(x, y){
+    constructor(x: number, y: number){
         this.x = x;
         this.y = y;
     }

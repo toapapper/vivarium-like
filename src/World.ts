@@ -14,10 +14,11 @@ export class World{
     }
 
     InitializeTiles(){
+        this.tiles = [];
         for(let i = 0; i < this.size.x; i++){
             this.tiles.push([]);
             for(let j = 0; j < this.size.y; j++){
-                this.tiles[i][j] = new Tile(new Vector2(i,j),"grass");
+                this.tiles[i].push(new Tile(new Vector2(i - this.size.x/2,j - this.size.y/2),"grass"));
             }
         }
     }

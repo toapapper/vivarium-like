@@ -42,6 +42,17 @@ export class Color{
         return "#" + componentToHex(this.r) + componentToHex(this.g) + componentToHex(this.b);
     }
 
+    WriteToArray(array:Uint8ClampedArray, index:number){
+        if(array.length < index + 4){
+            throw "invalid array";
+        }
+
+        array[index] = this.r;
+        array[index + 1] = this.g;
+        array[index + 2] = this.b;
+        array[index + 3] = this.alpha;
+    }
+
     /** if the array is invalid it returns magenta #ff00ff */
     static fromArray(array: Uint8ClampedArray, startIndex: number = 0): Color{
         let color: Color = new Color(0,0,0,0);
@@ -81,16 +92,10 @@ export function TintImage(image:HTMLImageElement, color:Color): HTMLImageElement
 
     imgCanvasContext.drawImage(image, 0, 0, image.width, image.height);
     let imgData = imgCanvasContext.getImageData(0,0, image.width, image.height);
-    console.log(imgData.data);
 
     for(let i = 0; i < imgData.data.length; i += 4){
-        console.log(imgData.data[i+3]);
         if(imgData.data[i + 3] > 0){ //if not totally transparent
-            console.log(imgData.data[i]);
-            console.log(imgData.data[i + 1]);
-            console.log(imgData.data[i + 2]);
             if(imgData.data[i] == 255 && imgData.data[i+1] == 255 && imgData.data[i+2] == 255){
-                console.log(color);
                 imgData.data[i] = color.r;
                 imgData.data[i + 1] = color.g;
                 imgData.data[i + 2] = color.b;
