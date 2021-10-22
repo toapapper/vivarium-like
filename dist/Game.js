@@ -41,7 +41,8 @@ function drawMap() {
     mapGen.SinkEdges();
     mapGen.GenerateNoiseMap(new Rectangle(genRect.right, genRect.bottom, genRect.width * 4, genRect.width * 4), mapSize);
     mapGen.GenerateNoiseMap(new Rectangle(genRect.right, genRect.bottom, genRect.width * 6, genRect.width * 6), mapSize);
-    mapGen.GenerateBlueNoiseDots();
+    //mapGen.NormalizeMap();
+    mapGen.GenerateBlueNoiseDots(genRect, waterLevel, 2, 4);
     // mapGen.GenerateNoiseMap(new Rectangle(genRect.right, genRect.bottom, genRect.width * 6, genRect.width * 6), mapSize);
     // mapGen.GenerateNoiseMap(genRect, mapSize);
     // mapGen.GenerateNoiseMap(new Rectangle(genRect.x, genRect.y, genRect.size.x * 2, genRect.size.y * 2), mapSize);

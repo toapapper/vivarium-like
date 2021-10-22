@@ -28,6 +28,8 @@ export class NoiseMapGenerator{
     baseColor: Color = new Color(127, 127, 127);
     treeColor: Color = new Color(20 ,20 ,20);
 
+    largestMapValue:number = 0;
+    smallestMapValue:number = 0;
 
     setNoiseSeed(seed:number|string): void{
         this.gen = new SimplexNoise(seed);
@@ -55,6 +57,34 @@ export class NoiseMapGenerator{
     }
 
     /**
+     * Adjusts values in the map so the max is 1 and min is -1
+     */
+    NormalizeMap(){
+        //how far down or up all values should go
+        let offset = (1 - this.largestMapValue - ( 1 + this.smallestMapValue));
+        //räkna ut hur stor den är nu, max - min, jämför med hur stor den ska vara. k= det
+        let currSize = this.largestMapValue - this.smallestMapValue;
+        let koeff = 2/currSize;
+        console.log(offset);
+        console.log(this.largestMapValue + " " + this.smallestMapValue);
+
+        for(let x = 0; x < this.mapSize.x; x++){
+            for(let y = 0; y < this.mapSize.y; y++){
+                this.currentMap[x][y] = Math.min(Math.max((this.currentMap[x][y] + offset) * koeff , -1),1);
+                
+                if(this.currentMap[x][y] > this.largestMapValue){
+                    this.largestMapValue = this.currentMap[x][y];
+                }
+                else if(this.currentMap[x][y] < this.smallestMapValue){
+                    this.smallestMapValue = this.currentMap[x][y];
+                }
+            }
+        }
+
+        console.log(this.largestMapValue + " " + this.smallestMapValue);
+    }
+
+    /**
      * Generates blue-noise dots, supposed to represent some kind of tree placement
      * @param rect world offset so to say
      * @param waterLevel trees cant spawn here
@@ -65,21 +95,29 @@ export class NoiseMapGenerator{
         let blueNoise:number[][] = [];
         let R = 2;//kan ändra beroende på höjd av landet
 
+        let stepSize = rect.width/this.mapSize.x;
         
-
-        for(let x = 0; x < this.mapSize.x; x++){
+        for(let ix = 0; ix < this.mapSize.x; ix++){
+            let x = ix * stepSize + rect.left;
             blueNoise.push([]);
-            for(let y = 0; y < this.mapSize.y; y++){
-                let nX = x/this.mapSize.x - .5;
-                let nY = y/this.mapSize.y - .5;
-
-                blueNoise[x].push(this.gen.noise2D(50 * x, 50 * y));
+            for(let iy = 0; iy < this.mapSize.y; iy++){
+                let y = iy * stepSize + rect.top;
+                blueNoise[ix].push(this.gen.noise2D(50 * x, 50 * y));
             }
         }
 
         for(let xc = 0; xc < this.mapSize.x; xc++){
             for(let yc = 0; yc < this.mapSize.y; yc++){
                 let max = 0;
+
+                if(this.currentMap[xc][yc] < waterLevel){
+                    continue;
+                }
+                else{
+                    let d = (this.currentMap[xc][yc] - waterLevel)/(1-waterLevel);
+                    R = (maxR - minR) * (1-d) + minR;
+                    R = Math.round(R);
+                }
 
                 for(let xn  = xc - R; xn < xc + R; xn++){
                     for(let yn = yc - R; yn < yc + R; yn++){
@@ -112,11 +150,9 @@ export class NoiseMapGenerator{
             return Math.pow((distance - .6)*3, 2) * -1;// + Math.pow(distance / 4, 2) + .4;//height = -x^2.3 + 1 
         }
 
-        console.log(this.mapSize.multiply(.5));
-
         for(let x = 0; x < this.mapSize.x; x++){
             for(let y = 0; y < this.mapSize.y; y++){
-                this.currentMap[x][y] += sinkEdgeFunc(new Vector2(x,y), this.mapSize);
+                this.currentMap[x][y] = Math.max(this.currentMap[x][y] + sinkEdgeFunc(new Vector2(x,y), this.mapSize), -1);
             }
         }
 
@@ -143,7 +179,17 @@ export class NoiseMapGenerator{
                     this.currentMap[x].push(map[x][y]);
                     continue;
                 }
-                this.currentMap[x][y] = this.currentMap[x][y] * (1-mapsCombinedInv) + map[x][y] * mapsCombinedInv;
+                
+                let val = this.currentMap[x][y] * (1-mapsCombinedInv) + map[x][y] * mapsCombinedInv;
+                this.currentMap[x][y] = val;
+
+                if(val < this.smallestMapValue){
+                    this.smallestMapValue = val;
+                }
+                else if(val > this.largestMapValue){
+                    this.largestMapValue = val;
+                }
+                
             }
         }
     }
@@ -151,6 +197,8 @@ export class NoiseMapGenerator{
     ResetCurrentMap(){
         this.currentMap = [];
         this.mapsCombined = 0;
+        this.largestMapValue = 0;
+        this.smallestMapValue = 0;
     }
 
     DrawCurrentMap(context:CanvasRenderingContext2D, size:Vector2, waterHeight:number = -1): void{
