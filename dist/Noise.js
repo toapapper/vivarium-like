@@ -3,6 +3,10 @@ import { Color } from "./ImageUtils.js";
 import { Vector2 } from "./Maths.js";
 let drawCanvas = document.createElement("canvas");
 let drawCanvasContext = drawCanvas.getContext("2d");
+//TODO:
+/* lägg till nåt slags stöd för olika miljöer, främst så att mer trädtäta områden är en sak.
+*
+*/
 export class NoiseMapGenerator {
     constructor() {
         this.gen = new SimplexNoise();
@@ -23,7 +27,7 @@ export class NoiseMapGenerator {
             return Vector2.zero;
         }
     }
-    setNoiseSeed(seed) {
+    setSeed(seed) {
         this.gen = new SimplexNoise(seed);
     }
     /**
@@ -48,12 +52,10 @@ export class NoiseMapGenerator {
      */
     NormalizeMap() {
         //how far down or up all values should go
-        let offset = (1 - this.largestMapValue - (1 + this.smallestMapValue));
+        let offset = (1 - this.largestMapValue - (1 + this.smallestMapValue)) / 2;
         //räkna ut hur stor den är nu, max - min, jämför med hur stor den ska vara. k= det
         let currSize = this.largestMapValue - this.smallestMapValue;
         let koeff = 2 / currSize;
-        console.log(offset);
-        console.log(this.largestMapValue + " " + this.smallestMapValue);
         for (let x = 0; x < this.mapSize.x; x++) {
             for (let y = 0; y < this.mapSize.y; y++) {
                 this.currentMap[x][y] = Math.min(Math.max((this.currentMap[x][y] + offset) * koeff, -1), 1);
@@ -65,7 +67,6 @@ export class NoiseMapGenerator {
                 }
             }
         }
-        console.log(this.largestMapValue + " " + this.smallestMapValue);
     }
     /**
      * Generates blue-noise dots, supposed to represent some kind of tree placement
@@ -76,7 +77,7 @@ export class NoiseMapGenerator {
      */
     GenerateBlueNoiseDots(rect, waterLevel, minR, maxR) {
         let blueNoise = [];
-        let R = 2; //kan ändra beroende på höjd av landet
+        let R = 2;
         let stepSize = rect.width / this.mapSize.x;
         for (let ix = 0; ix < this.mapSize.x; ix++) {
             let x = ix * stepSize + rect.left;

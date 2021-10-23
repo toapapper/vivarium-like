@@ -16,6 +16,8 @@ export class Tile{
 
     rect:Rectangle;
     imgPointer:HTMLImageElement;
+    
+    occupied:boolean = false;
 
     constructor(position:Vector2, type:TileType){
         switch(type){

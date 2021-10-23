@@ -3,8 +3,8 @@ import { Color } from "./ImageUtils.js";
 export class Camera {
     constructor(context, resolution) {
         /** one in game tile is dimensioned one by one, the size is how many tiles fit into the viewport at one time  */
-        this.viewPort = new Rectangle(0, 0, 25, 25);
-        this.backgroundColor = Color.fromHex("#DAF7A6");
+        this.viewPort = new Rectangle(0, 0, 100, 100);
+        this.backgroundColor = Color.fromHex("#4d92d0");
         this.context = context;
         this.resolution = resolution;
         this.drawCalls = [];
@@ -41,12 +41,12 @@ export class Camera {
     Move(towards) {
         this.viewPort.position = this.viewPort.position.add(towards);
     }
+    /** Positive numbers zoom closer */
     Zoom(amount) {
-        //Limit so you cant zoom close enough that your viewport size is 0,0
-        if ((this.viewPort.size.x <= 1 || this.viewPort.size.y <= 1) && Math.sign(amount) > 0) {
+        if ((this.viewPort.size.x <= 10 || this.viewPort.size.y <= 10) && amount > 0) {
             return;
         }
-        let ratio = this.viewPort.height / this.viewPort.width;
+        let ratio = this.resolution.y / this.resolution.x;
         this.viewPort.size = new Vector2(this.viewPort.width - amount, this.viewPort.height - amount * ratio);
     }
     WorldToViewPortRect(rect) {

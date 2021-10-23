@@ -7,6 +7,7 @@ let mountainImg = new Image();
 mountainImg.src = "./sprites/mountain_tile.png";
 export class Tile {
     constructor(position, type) {
+        this.occupied = false;
         switch (type) {
             case "grass":
                 this.imgPointer = grassImg;

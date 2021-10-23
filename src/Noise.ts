@@ -6,6 +6,11 @@ let drawCanvas:HTMLCanvasElement = document.createElement("canvas");
 let drawCanvasContext = drawCanvas.getContext("2d");
 
 
+//TODO:
+/* lägg till nåt slags stöd för olika miljöer, främst så att mer trädtäta områden är en sak.
+*
+*/
+
 export class NoiseMapGenerator{
 
     gen = new SimplexNoise();
@@ -31,7 +36,7 @@ export class NoiseMapGenerator{
     largestMapValue:number = 0;
     smallestMapValue:number = 0;
 
-    setNoiseSeed(seed:number|string): void{
+    setSeed(seed:number|string): void{
         this.gen = new SimplexNoise(seed);
     }
     
@@ -61,12 +66,10 @@ export class NoiseMapGenerator{
      */
     NormalizeMap(){
         //how far down or up all values should go
-        let offset = (1 - this.largestMapValue - ( 1 + this.smallestMapValue));
+        let offset = (1 - this.largestMapValue - ( 1 + this.smallestMapValue))/2;
         //räkna ut hur stor den är nu, max - min, jämför med hur stor den ska vara. k= det
         let currSize = this.largestMapValue - this.smallestMapValue;
         let koeff = 2/currSize;
-        console.log(offset);
-        console.log(this.largestMapValue + " " + this.smallestMapValue);
 
         for(let x = 0; x < this.mapSize.x; x++){
             for(let y = 0; y < this.mapSize.y; y++){
@@ -80,8 +83,6 @@ export class NoiseMapGenerator{
                 }
             }
         }
-
-        console.log(this.largestMapValue + " " + this.smallestMapValue);
     }
 
     /**
@@ -93,7 +94,7 @@ export class NoiseMapGenerator{
      */
     GenerateBlueNoiseDots(rect: Rectangle, waterLevel:number, minR:number, maxR:number){
         let blueNoise:number[][] = [];
-        let R = 2;//kan ändra beroende på höjd av landet
+        let R = 2;
 
         let stepSize = rect.width/this.mapSize.x;
         

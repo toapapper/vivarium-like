@@ -9,13 +9,13 @@ type DrawCall = {
 export class Camera{
 
     /** one in game tile is dimensioned one by one, the size is how many tiles fit into the viewport at one time  */
-    viewPort: Rectangle = new Rectangle(0, 0, 25, 25);
+    viewPort: Rectangle = new Rectangle(0, 0, 100, 100);
     context: CanvasRenderingContext2D;
     readonly resolution: Vector2;
 
     drawCalls:DrawCall[];
 
-    backgroundColor:Color = Color.fromHex("#DAF7A6");
+    backgroundColor:Color = Color.fromHex("#4d92d0");
     
     /** the pixel size of one unit */
     get scale():number { 
@@ -62,13 +62,13 @@ export class Camera{
         this.viewPort.position = this.viewPort.position.add(towards);
     }
 
+    /** Positive numbers zoom closer */
     Zoom(amount:number){
-        //Limit so you cant zoom close enough that your viewport size is 0,0
-        if((this.viewPort.size.x <= 1 || this.viewPort.size.y <= 1) && Math.sign(amount) > 0){
+        if((this.viewPort.size.x <= 10 || this.viewPort.size.y <= 10) && amount > 0){
             return;
         }
         
-        let ratio:number = this.viewPort.height/this.viewPort.width;
+        let ratio:number = this.resolution.y/this.resolution.x;
         this.viewPort.size = new Vector2(this.viewPort.width - amount, this.viewPort.height - amount * ratio);
     }
 
