@@ -20,6 +20,28 @@ export class World{
         this.size = size;
     }
 
+    /* 
+    *   TODO:
+    *   lägg till en list - offset så att man kan placera nya tiles i minuskoordinater. Kanske också göra så världen genererars med 0,0 i mitten då.
+    *   lägg alla gameobjects(apples, trees, creatures) i samma datastruktur som är uppdelad enligt utrymmet
+    *   Ha creatures och träd och kanske också äpplen faktiskt i samma spacepartition-struktur. GetAtPosition, GetWithinRange Kanske hashlista med id-n och i klassen gameObject finns plats.
+    *   Ha dem också i en stor array, så att de är åtkomliga via deras index
+    * 
+    *   QUADTREE:
+    *       Varje nod har fyra barn om den inte är en lövnod. Om en nods datamängd överskrider ett antal så splittras den i fyra.
+    *       Borde kolla om noder borde mergeas också då och då.
+    *       Löv noderna är då altså bara en lista över saker som finns i det området. Skulle kunna sätta 10 eller 100 gameObjects som gräns eller något.
+    *       Behöver ha utifrån: 
+    *           Get at position(position)
+    *           Get in range(position, range)
+    *           UpdateElement(element:Type)
+    * 
+    *       Borde räkna hur många element de innehåller via deras barn. Så att de kan kollapsas när de har tillräckligt få element.
+    *       Collapse()
+    *       Split()
+    *
+    */
+
     GenerateNew(seed?:number, waterLevel:number = -.2): void{
         let gen:NoiseMapGenerator = new NoiseMapGenerator();
         if(seed != undefined){
