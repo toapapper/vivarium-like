@@ -2,16 +2,15 @@ import { Camera } from "./Camera.js";
 import { Rectangle, Vector2 } from "./Maths.js";
 import { NoiseMapGenerator } from "./Noise.js";
 import { Tile, TileType } from "./Tile.js";
-import { Tree, Apple } from "./Tree.js";
 import { Creature } from "./Creature.js";
+import { GameObject } from "./GameObject.js";
 
 
 export class World{
 
     tiles:Tile[][];
-    trees:Tree[];
-    apples:Apple[];
-    creatures:Creature[];
+    
+    //gameObjects:GameObject[] = [];
 
     size:Vector2;
 
@@ -80,7 +79,7 @@ export class World{
         return null;
     }
 
-    SpawnItem(position:Vector2, item:Creature|Tree|Apple){
+    SpawnGameObject(position:Vector2, gObject:GameObject){
         //find nearest unoccupied position to place an item.
     }
 
@@ -90,6 +89,10 @@ export class World{
                 tile.Draw(camera);
             });
         });
+
+        // this.gameObjects.forEach(function(gObject:GameObject){
+        //     gObject.Draw(camera);
+        // });
     }
 
 }

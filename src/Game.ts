@@ -33,8 +33,8 @@ camera.viewPort.position = world.size.multiply(.5);
 
 setInterval(function(){
     world.Draw(camera);
-    testCreature.draw(camera);
-    testCreature2.draw(camera);
+    testCreature.Draw(camera);
+    testCreature2.Draw(camera);
     camera.Update();
 }, 32);
 

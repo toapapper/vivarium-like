@@ -13,6 +13,9 @@ export class Vector2 {
     set intX(value) { this.x = Math.round(value); }
     get intY() { return Math.round(this.y); }
     set intY(value) { this.y = Math.round(value); }
+    round() {
+        return new Vector2(Math.round(this.x), Math.round(this.y));
+    }
     length() {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }

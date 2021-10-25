@@ -20,6 +20,11 @@ export class Vector2{
         this.y = y;
     }
 
+    
+    round(): Vector2{
+        return new Vector2(Math.round(this.x), Math.round(this.y));
+    }
+
     length(): number{
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
