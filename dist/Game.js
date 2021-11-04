@@ -9,6 +9,8 @@ let camera = new Camera(context, new Vector2(canvas.width, canvas.height));
 context.fillStyle = "#4d92d0";
 context.imageSmoothingEnabled = false;
 context.fillRect(0, 0, canvas.width, canvas.height);
+//TA BORT !!!!
+console.log("HEJHEJ!");
 let tintedImg = new Image();
 let testImg = new Image();
 testImg.src = "./sprites/bear.png";
