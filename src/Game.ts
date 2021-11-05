@@ -14,9 +14,6 @@ context.fillStyle = "#4d92d0";
 context.imageSmoothingEnabled = false;
 context.fillRect(0,0, canvas.width, canvas.height);
 
-//TA BORT !!!!
-console.log("HEJHEJ!");
-
 
 let tintedImg = new Image();
 let testImg = new Image();
@@ -39,7 +36,7 @@ setInterval(function(){
     testCreature.Draw(camera);
     testCreature2.Draw(camera);
     camera.Update();
-}, 32);
+}, 24);
 
 // let mapGen:NoiseMapGenerator = new NoiseMapGenerator();
 //mapGen.setNoiseSeed("hej");
