@@ -9,9 +9,13 @@ export class Vector2 {
     static get down() { return new Vector2(0, 1); }
     static get left() { return new Vector2(-1, 0); }
     static get right() { return new Vector2(1, 0); }
+    /** x rounded to nearest integer */
     get intX() { return Math.round(this.x); }
+    /** set x but value is rounded to nearest integer */
     set intX(value) { this.x = Math.round(value); }
+    /** y rounded to nearest integer */
     get intY() { return Math.round(this.y); }
+    /** set y but value is rounded to nearest integer */
     set intY(value) { this.y = Math.round(value); }
     round() {
         return new Vector2(Math.round(this.x), Math.round(this.y));

@@ -9,8 +9,6 @@ let camera = new Camera(context, new Vector2(canvas.width, canvas.height));
 context.fillStyle = "#4d92d0";
 context.imageSmoothingEnabled = false;
 context.fillRect(0, 0, canvas.width, canvas.height);
-//TA BORT !!!!
-console.log("HEJHEJ!");
 let tintedImg = new Image();
 let testImg = new Image();
 testImg.src = "./sprites/bear.png";
@@ -22,13 +20,13 @@ testImg.onload = function () {
 };
 let world = new World(new Vector2(100, 100));
 world.GenerateNew();
-camera.viewPort.position = world.size.multiply(.5);
+camera.viewport.position = world.size.multiply(.5);
 setInterval(function () {
     world.Draw(camera);
     testCreature.Draw(camera);
     testCreature2.Draw(camera);
     camera.Update();
-}, 32);
+}, 1000);
 // let mapGen:NoiseMapGenerator = new NoiseMapGenerator();
 //mapGen.setNoiseSeed("hej");
 // let mapSize = new Vector2(100,100);
@@ -51,6 +49,13 @@ setInterval(function () {
 //     // mapGen.GenerateNoiseMap(new Rectangle(genRect.x, genRect.y, genRect.size.x * 2, genRect.size.y * 2), mapSize);
 //     mapGen.DrawCurrentMap(context, new Vector2(800,800), waterLevel);
 // }
+document.addEventListener("click", function (event) {
+    let clickPos = new Vector2(event.x - canvas.getBoundingClientRect().left, event.y - canvas.getBoundingClientRect().top);
+    let wPos = Camera.main.ViewportToWorldPoint(clickPos);
+    console.log(clickPos);
+    console.log(wPos);
+    world.GetTileAt(Camera.main.ViewportToWorldPoint(clickPos)).highlighted = true;
+});
 document.addEventListener("keydown", function (event) {
     if (event.key === "a") {
         camera.Move(Vector2.left.multiply(1.5));
@@ -89,5 +94,6 @@ document.addEventListener("keydown", function (event) {
     //     waterLevel -= .1;
     // }
     //drawMap();
+    camera.Update();
 });
 //# sourceMappingURL=Game.js.map

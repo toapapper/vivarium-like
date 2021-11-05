@@ -29,14 +29,14 @@ testImg.onload = function(){
 
 let world:World = new World(new Vector2(100,100));
 world.GenerateNew();
-camera.viewPort.position = world.size.multiply(.5);
+camera.viewport.position = world.size.multiply(.5);
 
 setInterval(function(){
     world.Draw(camera);
     testCreature.Draw(camera);
     testCreature2.Draw(camera);
     camera.Update();
-}, 24);
+}, 1000);
 
 // let mapGen:NoiseMapGenerator = new NoiseMapGenerator();
 //mapGen.setNoiseSeed("hej");
@@ -63,6 +63,17 @@ setInterval(function(){
 //     // mapGen.GenerateNoiseMap(new Rectangle(genRect.x, genRect.y, genRect.size.x * 2, genRect.size.y * 2), mapSize);
 //     mapGen.DrawCurrentMap(context, new Vector2(800,800), waterLevel);
 // }
+
+document.addEventListener("click", function(event:MouseEvent){
+    
+    let clickPos:Vector2 = new Vector2(event.x - canvas.getBoundingClientRect().left, event.y - canvas.getBoundingClientRect().top);
+    let wPos = Camera.main.ViewportToWorldPoint(clickPos);
+    
+    console.log(clickPos);
+    console.log(wPos);
+
+    world.GetTileAt(Camera.main.ViewportToWorldPoint(clickPos)).highlighted = true;
+});
 
 document.addEventListener("keydown", function(event:KeyboardEvent){
     if(event.key === "a"){
@@ -103,4 +114,5 @@ document.addEventListener("keydown", function(event:KeyboardEvent){
     // }
 
     //drawMap();
+    camera.Update();
 })

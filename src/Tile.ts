@@ -13,11 +13,11 @@ mountainImg.src = "./sprites/mountain_tile.png";
 export type TileType = "grass"|"water"|"mountain";
 
 export class Tile{
-
     rect:Rectangle;
     imgPointer:HTMLImageElement;
     
     occupied:boolean = false;
+    highlighted:boolean = false;
 
     constructor(position:Vector2, type:TileType){
         switch(type){
@@ -37,6 +37,9 @@ export class Tile{
 
     Draw(camera:Camera){
         camera.DrawImage(this.imgPointer, this.rect);
+        if(this.highlighted){
+            camera.DrawImage(mountainImg, this.rect);
+        }
     }
 
 }

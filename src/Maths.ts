@@ -9,10 +9,14 @@ export class Vector2{
     x:number;
     y:number;
 
+    /** x rounded to nearest integer */
     get intX(): number{ return Math.round(this.x); }
+    /** set x but value is rounded to nearest integer */
     set intX(value:number){ this.x = Math.round(value); }
 
+    /** y rounded to nearest integer */
     get intY(): number{ return Math.round(this.y); }
+    /** set y but value is rounded to nearest integer */
     set intY(value:number){ this.y = Math.round(value); }
     
     constructor(x: number, y: number){

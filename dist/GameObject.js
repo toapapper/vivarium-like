@@ -25,7 +25,7 @@ export class Tree extends GameObject {
         this.appleTimerMax = appleTimerMax;
     }
     ResetAppleTimer() {
-        this.appleTimer = Math.random();
+        this.appleTimer = (Math.random() * (this.appleTimerMin - this.appleTimerMax)) + this.appleTimerMin;
     }
     Update(dt) {
         super.Update(dt);

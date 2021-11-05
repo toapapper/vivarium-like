@@ -1,16 +1,16 @@
+import { Camera } from "./Camera.js";
 import { Rectangle, Vector2 } from "./Maths.js";
 import { NoiseMapGenerator } from "./Noise.js";
 import { Tile } from "./Tile.js";
 export class World {
     constructor(size) {
+        this.tiles = [];
+        this.gameObjects = [];
         this.size = size;
     }
     /*
     *   TODO:
-    *   lägg till en list - offset så att man kan placera nya tiles i minuskoordinater. Kanske också göra så världen genererars med 0,0 i mitten då.
-    *   lägg alla gameobjects(apples, trees, creatures) i samma datastruktur som är uppdelad enligt utrymmet
-    *   Ha creatures och träd och kanske också äpplen faktiskt i samma spacepartition-struktur. GetAtPosition, GetWithinRange Kanske hashlista med id-n och i klassen gameObject finns plats.
-    *   Ha dem också i en stor array, så att de är åtkomliga via deras index
+    * Lägg till alla gameobjects i ett quadtree för att snabbt o effektivt kunna komma åt/hitta dem baserat på var de finns i världen
     *
     *   QUADTREE:
     *       Varje nod har fyra barn om den inte är en lövnod. Om en nods datamängd överskrider ett antal så splittras den i fyra.
@@ -56,7 +56,11 @@ export class World {
         }
     }
     GetTileAt(position) {
-        return null;
+        position = Camera.main.ViewportToWorldPoint(position);
+        if (position.intX > 0 && position.intX < this.size.x && position.intY > 0 && position.intY < this.size.y) {
+            return this.tiles[position.intX][position.intY];
+        }
+        return undefined;
     }
     SpawnGameObject(position, gObject) {
         //find nearest unoccupied position to place an item.

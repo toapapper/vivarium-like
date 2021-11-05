@@ -8,6 +8,7 @@ mountainImg.src = "./sprites/mountain_tile.png";
 export class Tile {
     constructor(position, type) {
         this.occupied = false;
+        this.highlighted = false;
         switch (type) {
             case "grass":
                 this.imgPointer = grassImg;
@@ -23,6 +24,9 @@ export class Tile {
     }
     Draw(camera) {
         camera.DrawImage(this.imgPointer, this.rect);
+        if (this.highlighted) {
+            camera.DrawImage(mountainImg, this.rect);
+        }
     }
 }
 //# sourceMappingURL=Tile.js.map
