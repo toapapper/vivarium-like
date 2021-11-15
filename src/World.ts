@@ -8,29 +8,30 @@ import { GameObject } from "./GameObject.js";
 
 export class World{
 
-    tiles:Tile[][] = [];
+    static Instance:World;
+
+    tiles:Tile[][];
     gameObjects:GameObject[] = [];
-
     size:Vector2;
-
 
     constructor(size:Vector2){
         this.size = size;
+        World.Instance = this;
     }
 
-    /* 
+    /*
     *   TODO:
     * Lägg till alla gameobjects i ett quadtree för att snabbt o effektivt kunna komma åt/hitta dem baserat på var de finns i världen
-    * 
+    *
     *   QUADTREE:
     *       Varje nod har fyra barn om den inte är en lövnod. Om en nods datamängd överskrider ett antal så splittras den i fyra.
     *       Borde kolla om noder borde mergeas också då och då.
     *       Löv noderna är då altså bara en lista över saker som finns i det området. Skulle kunna sätta 10 eller 100 gameObjects som gräns eller något.
-    *       Behöver ha utifrån: 
+    *       Behöver ha utifrån:
     *           Get at position(position)
     *           Get in range(position, range)
     *           UpdateElement(element:Type)
-    * 
+    *
     *       Borde räkna hur många element de innehåller via deras barn. Så att de kan kollapsas när de har tillräckligt få element.
     *       Collapse()
     *       Split()
@@ -65,7 +66,7 @@ export class World{
                 else if(height == 2){
                     type = "mountain";//Spawna ett träd egentligen
                 }
-                
+
                 this.tiles[x].push(new Tile(new Vector2(x, y), type));
             }
         }
@@ -84,6 +85,12 @@ export class World{
         //find nearest unoccupied position to place an item.
     }
 
+    Update(dt:number): void{
+        this.gameObjects.forEach(function(gObject:GameObject){
+            gObject.Update(dt);
+        });
+    }
+
     Draw(camera:Camera): void{
         this.tiles.forEach(function(column:Tile[]){
             column.forEach(function(tile:Tile){
@@ -91,9 +98,9 @@ export class World{
             });
         });
 
-        // this.gameObjects.forEach(function(gObject:GameObject){
-        //     gObject.Draw(camera);
-        // });
+        this.gameObjects.forEach(function(gObject:GameObject){
+            gObject.Draw(camera);
+        });
     }
 
 }

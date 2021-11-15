@@ -18,6 +18,7 @@ export class GameObject{
         this.rect = new Rectangle(position.x, position.y, 1, 1);
     }
 
+    /** For timers and timing and such. For example the trees appleSpawnTimers */
     Update(dt:number): void{
 
     }
@@ -41,7 +42,7 @@ export class Tree extends GameObject{
         this.sprite = treeSprite;
         this.appleTimerMin = appleTimerMin;
         this.appleTimerMax = appleTimerMax;
-        
+
     }
 
     ResetAppleTimer(){
@@ -50,5 +51,11 @@ export class Tree extends GameObject{
 
     Update(dt:number): void{
         super.Update(dt);
+
+        this.appleTimer -= dt;
+        if(this.appleTimer <= 0){
+            //spawn apple
+
+        }
     }
 }
