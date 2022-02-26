@@ -8,7 +8,7 @@ import { NoiseMapGenerator } from "./Noise.js";
 let canvas: HTMLCanvasElement = document.getElementById("GameCanvas") as HTMLCanvasElement;
 let context: CanvasRenderingContext2D = canvas.getContext("2d");
 
-let camera = new Camera(context, new Vector2(canvas.width, canvas.height));
+let camera = new Camera(context, new Vector2(canvas.width, canvas.height), Vector2.zero);
 
 context.fillStyle = "#4d92d0";
 context.imageSmoothingEnabled = false;
@@ -29,14 +29,14 @@ testImg.onload = function(){
 
 let world:World = new World(new Vector2(100,100));
 world.GenerateNew();
-camera.viewport.position = world.size.multiply(.5);
+camera.Move(world.size.multiply(.5));
 
 setInterval(function(){
     world.Draw(camera);
     testCreature.Draw(camera);
     testCreature2.Draw(camera);
     camera.Update();
-}, 1000);
+}, 16);
 
 // let mapGen:NoiseMapGenerator = new NoiseMapGenerator();
 //mapGen.setNoiseSeed("hej");
@@ -114,5 +114,8 @@ document.addEventListener("keydown", function(event:KeyboardEvent){
     // }
 
     //drawMap();
+    world.Draw(camera);
+    testCreature.Draw(camera);
+    testCreature2.Draw(camera);
     camera.Update();
 })

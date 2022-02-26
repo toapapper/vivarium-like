@@ -8,6 +8,7 @@ export class GameObject {
     constructor(position) {
         this.rect = new Rectangle(position.x, position.y, 1, 1);
     }
+    /** For timers and timing and such. For example the trees appleSpawnTimers */
     Update(dt) {
     }
     Draw(camera) {
@@ -29,6 +30,10 @@ export class Tree extends GameObject {
     }
     Update(dt) {
         super.Update(dt);
+        this.appleTimer -= dt;
+        if (this.appleTimer <= 0) {
+            //spawn apple
+        }
     }
 }
 //# sourceMappingURL=GameObject.js.map

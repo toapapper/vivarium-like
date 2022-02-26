@@ -1,12 +1,11 @@
-import { Camera } from "./Camera.js";
 import { Rectangle, Vector2 } from "./Maths.js";
 import { NoiseMapGenerator } from "./Noise.js";
 import { Tile } from "./Tile.js";
 export class World {
     constructor(size) {
-        this.tiles = [];
         this.gameObjects = [];
         this.size = size;
+        World.Instance = this;
     }
     /*
     *   TODO:
@@ -56,7 +55,7 @@ export class World {
         }
     }
     GetTileAt(position) {
-        position = Camera.main.ViewportToWorldPoint(position);
+        //position = Camera.main.ViewportToWorldPoint(position);
         if (position.intX > 0 && position.intX < this.size.x && position.intY > 0 && position.intY < this.size.y) {
             return this.tiles[position.intX][position.intY];
         }
@@ -65,15 +64,20 @@ export class World {
     SpawnGameObject(position, gObject) {
         //find nearest unoccupied position to place an item.
     }
+    Update(dt) {
+        this.gameObjects.forEach(function (gObject) {
+            gObject.Update(dt);
+        });
+    }
     Draw(camera) {
         this.tiles.forEach(function (column) {
             column.forEach(function (tile) {
                 tile.Draw(camera);
             });
         });
-        // this.gameObjects.forEach(function(gObject:GameObject){
-        //     gObject.Draw(camera);
-        // });
+        this.gameObjects.forEach(function (gObject) {
+            gObject.Draw(camera);
+        });
     }
 }
 //# sourceMappingURL=World.js.map

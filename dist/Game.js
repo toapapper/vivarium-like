@@ -5,7 +5,7 @@ import { Creature } from "./Creature.js";
 import { World } from "./World.js";
 let canvas = document.getElementById("GameCanvas");
 let context = canvas.getContext("2d");
-let camera = new Camera(context, new Vector2(canvas.width, canvas.height));
+let camera = new Camera(context, new Vector2(canvas.width, canvas.height), Vector2.zero);
 context.fillStyle = "#4d92d0";
 context.imageSmoothingEnabled = false;
 context.fillRect(0, 0, canvas.width, canvas.height);
@@ -20,13 +20,13 @@ testImg.onload = function () {
 };
 let world = new World(new Vector2(100, 100));
 world.GenerateNew();
-camera.viewport.position = world.size.multiply(.5);
+camera.Move(world.size.multiply(.5));
 setInterval(function () {
     world.Draw(camera);
     testCreature.Draw(camera);
     testCreature2.Draw(camera);
     camera.Update();
-}, 1000);
+}, 16);
 // let mapGen:NoiseMapGenerator = new NoiseMapGenerator();
 //mapGen.setNoiseSeed("hej");
 // let mapSize = new Vector2(100,100);
@@ -94,6 +94,9 @@ document.addEventListener("keydown", function (event) {
     //     waterLevel -= .1;
     // }
     //drawMap();
+    world.Draw(camera);
+    testCreature.Draw(camera);
+    testCreature2.Draw(camera);
     camera.Update();
 });
 //# sourceMappingURL=Game.js.map

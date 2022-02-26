@@ -15,7 +15,7 @@ export class Creature extends GameObject{//Placeholder än så länge
 
     }
 
-    /** run ai, evaluate next action. Could have a "reactionTime-cooldown on evaluating a new one. Could save on performance." */
+    /** run ai, evaluate next action. Could have a "reactionTime-cooldown on evaluating a new one. Could save on performance and make for better behavior." */
     GetAgentAction(): AgentActions {
         return AgentActions.none;
     }

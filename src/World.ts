@@ -73,7 +73,7 @@ export class World{
     }
 
     GetTileAt(position:Vector2): Tile{
-        position = Camera.main.ViewportToWorldPoint(position);
+        //position = Camera.main.ViewportToWorldPoint(position);
         if(position.intX > 0 && position.intX < this.size.x && position.intY > 0 && position.intY < this.size.y){
             return this.tiles[position.intX][position.intY];
         }
