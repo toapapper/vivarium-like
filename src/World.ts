@@ -3,7 +3,7 @@ import { Rectangle, Vector2 } from "./Maths.js";
 import { NoiseMapGenerator } from "./Noise.js";
 import { Tile, TileType } from "./Tile.js";
 import { Creature } from "./Creature.js";
-import { GameObject } from "./GameObject.js";
+import { GameObject, Tree } from "./GameObject.js";
 
 
 export class World{
@@ -11,7 +11,9 @@ export class World{
     static Instance:World;
 
     tiles:Tile[][];
-    gameObjects:GameObject[] = [];
+    Plants:GameObject[] = [];
+    Animals:GameObject[] = [];
+
     size:Vector2;
 
     constructor(size:Vector2){
@@ -63,17 +65,18 @@ export class World{
                 if(height < waterLevel){
                     type = "water";
                 }
-                else if(height == 2){
-                    type = "mountain";//Spawna ett träd egentligen
-                }
 
                 this.tiles[x].push(new Tile(new Vector2(x, y), type));
+                
+                if(height == 2){
+                    this.Plants.push(new Tree(new Vector2(x,y)));
+                }
+
             }
         }
     }
 
     GetTileAt(position:Vector2): Tile{
-        //position = Camera.main.ViewportToWorldPoint(position);
         if(position.intX > 0 && position.intX < this.size.x && position.intY > 0 && position.intY < this.size.y){
             return this.tiles[position.intX][position.intY];
         }
@@ -81,12 +84,16 @@ export class World{
         return undefined;
     }
 
-    SpawnGameObject(position:Vector2, gObject:GameObject){
+    SpawnGameObject(position:Vector2, spawn:GameObject){
         //find nearest unoccupied position to place an item.
     }
 
     Update(dt:number): void{
-        this.gameObjects.forEach(function(gObject:GameObject){
+        this.Animals.forEach(function(gObject:GameObject){
+            gObject.Update(dt);
+        });
+
+        this.Plants.forEach(function(gObject:GameObject){
             gObject.Update(dt);
         });
     }
@@ -98,7 +105,11 @@ export class World{
             });
         });
 
-        this.gameObjects.forEach(function(gObject:GameObject){
+        this.Animals.forEach(function(gObject:GameObject){
+            gObject.Draw(camera);
+        });
+
+        this.Plants.forEach(function(gObject:GameObject){
             gObject.Draw(camera);
         });
     }

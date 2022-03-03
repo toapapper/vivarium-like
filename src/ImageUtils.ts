@@ -13,6 +13,14 @@ export class Color{
     b: number;
     alpha: number;
     
+    get h(): number{return 1;}//TODO: implement
+    get s(): number{return 1;}
+    get v(): number{return 1;}
+
+    set h(value:number){}
+    set s(value:number){}
+    set v(value:number){}
+
     constructor(r: number, g: number, b: number, alpha: number = 255){
         this.r = r;
         this.g = g;
@@ -86,7 +94,7 @@ export class Color{
  * @param color alpha will not be taken into account
  * @returns a tinted image
  */
-export function TintImage(image:HTMLImageElement, color:Color): HTMLImageElement{
+export function ColorWhites(image:HTMLImageElement, color:Color): HTMLImageElement{
     imgCanvas.width = image.width;
     imgCanvas.height = image.height;
 
@@ -109,4 +117,20 @@ export function TintImage(image:HTMLImageElement, color:Color): HTMLImageElement
 
     return tintedImg;
 }
+
+/**
+ * Tints the whole image towards the color. Makes a copy of the pixel, changes hue and saturation to that of the color, and merges them based on strength.
+ * @param image Image of which a tinted copy will be returned
+ * @param color Target Color
+ * @param strength How strong the tint is. 1 = max strength. 0 = min
+ * @returns 
+ */
+export function TintSprite(image:HTMLImageElement, color:Color, strength:number): HTMLImageElement{
+
+    //TODO: implementera.
+    //Implementera också HSV i color
+    
+    return image;
+}
+
 //#endregion

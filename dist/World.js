@@ -1,9 +1,11 @@
 import { Rectangle, Vector2 } from "./Maths.js";
 import { NoiseMapGenerator } from "./Noise.js";
 import { Tile } from "./Tile.js";
+import { Tree } from "./GameObject.js";
 export class World {
     constructor(size) {
-        this.gameObjects = [];
+        this.Plants = [];
+        this.Animals = [];
         this.size = size;
         World.Instance = this;
     }
@@ -47,25 +49,27 @@ export class World {
                 if (height < waterLevel) {
                     type = "water";
                 }
-                else if (height == 2) {
-                    type = "mountain"; //Spawna ett träd egentligen
-                }
                 this.tiles[x].push(new Tile(new Vector2(x, y), type));
+                if (height == 2) {
+                    this.Plants.push(new Tree(new Vector2(x, y)));
+                }
             }
         }
     }
     GetTileAt(position) {
-        //position = Camera.main.ViewportToWorldPoint(position);
         if (position.intX > 0 && position.intX < this.size.x && position.intY > 0 && position.intY < this.size.y) {
             return this.tiles[position.intX][position.intY];
         }
         return undefined;
     }
-    SpawnGameObject(position, gObject) {
+    SpawnGameObject(position, spawn) {
         //find nearest unoccupied position to place an item.
     }
     Update(dt) {
-        this.gameObjects.forEach(function (gObject) {
+        this.Animals.forEach(function (gObject) {
+            gObject.Update(dt);
+        });
+        this.Plants.forEach(function (gObject) {
             gObject.Update(dt);
         });
     }
@@ -75,7 +79,10 @@ export class World {
                 tile.Draw(camera);
             });
         });
-        this.gameObjects.forEach(function (gObject) {
+        this.Animals.forEach(function (gObject) {
+            gObject.Draw(camera);
+        });
+        this.Plants.forEach(function (gObject) {
             gObject.Draw(camera);
         });
     }

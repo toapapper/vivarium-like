@@ -33,15 +33,18 @@ export class GameObject{
 export class Tree extends GameObject{
 
     appleTimer:number = 0;
-    appleTimerMin:number;
-    appleTimerMax:number;
+    appleTimerMin:number = 20;
+    appleTimerMax:number = 60;
 
 
-    constructor(position:Vector2, appleTimerMin:number, appleTimerMax:number){
+    constructor(position:Vector2, appleTimerMin?:number, appleTimerMax?:number){
         super(position);
         this.sprite = treeSprite;
-        this.appleTimerMin = appleTimerMin;
-        this.appleTimerMax = appleTimerMax;
+
+        if(appleTimerMin)
+            this.appleTimerMin = appleTimerMin;
+        if(appleTimerMax)
+            this.appleTimerMax = appleTimerMax;
 
     }
 

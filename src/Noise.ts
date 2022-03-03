@@ -89,7 +89,7 @@ export class NoiseMapGenerator{
      * Generates blue-noise dots, supposed to represent some kind of tree placement
      * @param rect world offset so to say
      * @param waterLevel trees cant spawn here
-     * @param minR R dictates the densite, lower R higher density, R increases between minimum and maximum the higher above the waterlevel we get
+     * @param minR R dictates the density, lower R higher density. R increases as we get higher above the water level
      * @param maxR 
      */
     GenerateBlueNoiseDots(rect: Rectangle, waterLevel:number, minR:number, maxR:number){
@@ -202,6 +202,7 @@ export class NoiseMapGenerator{
         this.smallestMapValue = 0;
     }
 
+    //Function to draw height map
     DrawCurrentMap(context:CanvasRenderingContext2D, size:Vector2, waterHeight:number = -1): void{
         let pixels: number = this.currentMap.length * this.currentMap[0].length;
         let imgData:ImageData = context.getImageData(0,0,this.currentMap.length, this.currentMap[0].length);

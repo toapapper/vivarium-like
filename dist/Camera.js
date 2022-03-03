@@ -72,11 +72,9 @@ export class Camera {
      * @param viewPortPoint Given in pixels
      */
     ViewportToWorldPoint(viewportPoint) {
-        //let outVector = viewportPoint;
         let outVector = viewportPoint.subtract(this.resolution.divide(2));
         outVector = outVector.multiply(1 / this.scale);
         outVector = outVector.add(this.viewport.position);
-        console.log("out:" + outVector + ". in:" + viewportPoint);
         return outVector;
     }
 }
