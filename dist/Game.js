@@ -18,7 +18,7 @@ testImg.onload = function () {
 };
 let world = new World(new Vector2(100, 100));
 world.GenerateNew();
-camera.viewport.position = world.size.multiply(.5);
+camera.Move(world.size.multiply(.5));
 let TickInterval = 16;
 setInterval(function () {
     world.Draw(camera);

@@ -45,7 +45,7 @@ export class Camera{
         this.context = context;
         this.canvas = canvas;
         this.drawCalls = [];
-        this.viewport.position = position;
+        this.viewport.position = Vector2.zero;
 
         Camera.main = this;
     }

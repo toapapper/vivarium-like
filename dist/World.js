@@ -1,6 +1,7 @@
 import { Rectangle, Vector2 } from "./Maths.js";
 import { NoiseMapGenerator } from "./Noise.js";
 import { Tile } from "./Tile.js";
+import { Mountain } from "./GameObjects/GameObject.js";
 export class World {
     constructor(size) {
         this.removalCount = 0;
@@ -44,15 +45,15 @@ export class World {
         for (let x = 0; x < this.size.x; x++) {
             this.tiles.push([]);
             for (let y = 0; y < this.size.y; y++) {
-                let type = "grass";
+                let water = false;
                 let height = gen.currentMap[x][y];
                 if (height < waterLevel) {
-                    type = "water";
+                    water = true;
                 }
-                else if (height == 2) {
-                    type = "mountain"; //Spawna ett träd egentligen
+                this.tiles[x].push(new Tile(new Vector2(x, y), water));
+                if (height == 2) {
+                    this.SpawnGameObject(new Vector2(x, y), new Mountain(new Vector2(x, y)));
                 }
-                this.tiles[x].push(new Tile(new Vector2(x, y), type));
             }
         }
     }
@@ -67,6 +68,9 @@ export class World {
         //find nearest unoccupied position to place an item.
         //TODO:implement better
         console.log("gameObject spawned");
+        if (this.tiles[position.intX][position.intY] == undefined) {
+            return;
+        }
         if (!this.tiles[position.intX][position.intY].occupied) {
             this.gameObjects.push(gObject);
             this.tiles[position.intX][position.intY].occupied = true;

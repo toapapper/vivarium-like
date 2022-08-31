@@ -1,4 +1,4 @@
-import { TintImage } from "../ImageUtils.js";
+import { ColorWhites } from "../ImageUtils.js";
 import { GameObject, Edible } from "./GameObject.js";
 import { AgentActionTypes, AI } from "../AI/AI.js";
 import { World } from "../World.js";
@@ -36,7 +36,7 @@ export class Attributes {
 }
 export class Species {
     constructor(name, tint, sprite, foodType, attributes, defaultBehaviour) {
-        this.sprite = TintImage(sprite, tint);
+        this.sprite = ColorWhites(sprite, tint);
         this.tint = tint;
         this.name = name;
         this.foodType = foodType;
@@ -102,7 +102,7 @@ export class Creature extends GameObject {
         let newPos = this.position.add(direction);
         let world = World.Instance;
         let newTile = world.GetTileAt(newPos);
-        if (newTile == undefined || newTile.occupied) {
+        if (newTile == undefined || newTile.occupied || newTile.water) {
             return;
         }
         world.GetTileAt(this.position).occupied = false;

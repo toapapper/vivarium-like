@@ -7,6 +7,9 @@ appleSprite.src = "../sprites/apple.png";
 let corpseSprite = new Image();
 corpseSprite.src = "../sprites/corpse.png";
 
+let mountainSprite = new Image();
+mountainSprite.src = "../sprites/mountain_tile.png";
+
 //This is a file containing the base gameObject class and some simpler gameObject-classes(tree, apple)
 
 export class GameObject{
@@ -32,6 +35,14 @@ export class GameObject{
         if(this.sprite != undefined){
             camera.DrawImage(this.sprite, this.rect);
         }
+    }
+}
+
+export class Mountain extends GameObject{
+    constructor(position:Vector2){
+        super(position);
+        
+        this.sprite = mountainSprite;
     }
 }
 

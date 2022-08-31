@@ -11,11 +11,10 @@ let mountainImg:HTMLImageElement = new Image();
 mountainImg.src = "./sprites/mountain_tile.png";
 
 
-export type TileType = "grass"|"water"|"mountain";
-
 export class Tile{
     rect:Rectangle;
     imgPointer:HTMLImageElement;
+    water:boolean;
 
     get position():Vector2{
         return this.rect.position;
@@ -25,17 +24,14 @@ export class Tile{
     occupiedBy:GameObject = null;
     highlighted:boolean = false;
 
-    constructor(position:Vector2, type:TileType){
-        switch(type){
-            case "grass":
-                this.imgPointer = grassImg;
-                break;
-            case "water":
-                this.imgPointer = waterImg;
-                break;
-            case "mountain":
-                this.imgPointer = mountainImg;
-                break;
+    constructor(position:Vector2, water:boolean){
+        this.water = water;
+
+        if(water){
+            this.imgPointer = waterImg;
+        }
+        else{
+            this.imgPointer = grassImg;
         }
 
         this.rect = new Rectangle(position.x, position.y, 1, 1);

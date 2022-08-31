@@ -1,5 +1,5 @@
 import { Rectangle, Vector2 } from "../Maths.js";
-import { Color, TintImage } from "../ImageUtils.js";
+import { Color, ColorWhites } from "../ImageUtils.js";
 import { Camera } from "../Camera.js";
 import { GameObject, Edible} from "./GameObject.js";
 import { AgentActionTypes, AI, AgentAction } from "../AI/AI.js";
@@ -68,7 +68,7 @@ export class Species{
     defaultAttributes:Attributes;
 
     constructor(name:string, tint:Color, sprite:HTMLImageElement, foodType:FoodType, attributes:Attributes, defaultBehaviour:number){
-        this.sprite = TintImage(sprite, tint);
+        this.sprite = ColorWhites(sprite, tint);
         this.tint = tint;
         this.name = name;
         this.foodType = foodType;
@@ -157,10 +157,10 @@ export class Creature extends GameObject{//Placeholder än så länge
         let world:World = World.Instance;
         let newTile:Tile = world.GetTileAt(newPos);
         
-        if(newTile == undefined || newTile.occupied){
+        if(newTile == undefined || newTile.occupied || newTile.water){
             return;
         }
-        
+
         world.GetTileAt(this.position).occupied = false;
         world.GetTileAt(this.position).occupiedBy = null;
         newTile.occupied = true;

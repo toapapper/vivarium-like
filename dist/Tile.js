@@ -6,20 +6,16 @@ waterImg.src = "./sprites/water_tile.png";
 let mountainImg = new Image();
 mountainImg.src = "./sprites/mountain_tile.png";
 export class Tile {
-    constructor(position, type) {
+    constructor(position, water) {
         this.occupied = false;
         this.occupiedBy = null;
         this.highlighted = false;
-        switch (type) {
-            case "grass":
-                this.imgPointer = grassImg;
-                break;
-            case "water":
-                this.imgPointer = waterImg;
-                break;
-            case "mountain":
-                this.imgPointer = mountainImg;
-                break;
+        this.water = water;
+        if (water) {
+            this.imgPointer = waterImg;
+        }
+        else {
+            this.imgPointer = grassImg;
         }
         this.rect = new Rectangle(position.x, position.y, 1, 1);
     }

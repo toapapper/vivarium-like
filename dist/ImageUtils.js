@@ -15,6 +15,12 @@ export class Color {
     static get red() { return new Color(255, 0, 0); }
     static get blue() { return new Color(0, 0, 255); }
     static get green() { return new Color(0, 255, 0); }
+    get h() { return 1; } //TODO: implement
+    get s() { return 1; }
+    get v() { return 1; }
+    set h(value) { }
+    set s(value) { }
+    set v(value) { }
     static fromHex(hex) {
         let color = new Color(0, 0, 0);
         //copy pasted from https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
@@ -69,7 +75,7 @@ export class Color {
  * @param color alpha will not be taken into account
  * @returns a tinted image
  */
-export function TintImage(image, color) {
+export function ColorWhites(image, color) {
     imgCanvas.width = image.width;
     imgCanvas.height = image.height;
     imgCanvasContext.drawImage(image, 0, 0, image.width, image.height);
@@ -87,6 +93,18 @@ export function TintImage(image, color) {
     let tintedImg = new Image();
     tintedImg.src = imgCanvas.toDataURL("image/png");
     return tintedImg;
+}
+/**
+ * Tints the whole image towards the color. Makes a copy of the pixel, changes hue and saturation to that of the color, and merges them based on strength.
+ * @param image Image of which a tinted copy will be returned
+ * @param color Target Color
+ * @param strength How strong the tint is. 1 = max strength. 0 = min
+ * @returns
+ */
+export function TintSprite(image, color, strength) {
+    //TODO: implementera.
+    //Implementera också HSV i color
+    return image;
 }
 //#endregion
 //# sourceMappingURL=ImageUtils.js.map

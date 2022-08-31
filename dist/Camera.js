@@ -6,6 +6,8 @@ import { Color } from "./ImageUtils.js";
     genom att dela ut drawcall-ids och sedan tar jag inte bort de olika drawcalls om inte det förfrågas
     kan däremot ändra dem.
     på så sätt behöver jag inte lägga till de permanenta sakerna hela tiden. och det som ska animeras kan ändå.
+
+    Ha ett system där man bara lägger till saker här som man vill ska ritas sen går den igenom dem och ritar dem i uppdate.
 */
 export class Camera {
     //canvas is assumed to be square
@@ -16,6 +18,7 @@ export class Camera {
         this.context = context;
         this.canvas = canvas;
         this.drawCalls = [];
+        this.viewport.position = Vector2.zero;
         Camera.main = this;
     }
     /** the pixel size of one unit */

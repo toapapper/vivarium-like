@@ -1,9 +1,9 @@
 import { Camera } from "./Camera.js";
 import { Rectangle, Vector2 } from "./Maths.js";
 import { NoiseMapGenerator } from "./Noise.js";
-import { Tile, TileType } from "./Tile.js";
+import { Tile } from "./Tile.js";
 import { Creature } from "./GameObjects/Creature.js";
-import { GameObject } from "./GameObjects/GameObject.js";
+import { GameObject, Mountain } from "./GameObjects/GameObject.js";
 
 
 export class World{
@@ -62,19 +62,19 @@ export class World{
         for(let x = 0; x < this.size.x; x++){
             this.tiles.push([]);
             for(let y = 0; y < this.size.y; y++){
-                let type:TileType = "grass";
+                let water:boolean = false; 
                 let height = gen.currentMap[x][y];
 
                 if(height < waterLevel){
-                    type = "water";
+                    water = true;
                 }
 
-                this.tiles[x].push(new Tile(new Vector2(x, y), type));
-
+                this.tiles[x].push(new Tile(new Vector2(x, y), water));
+                
+                
                 if(height == 2){
-                    this.Plants.push(new Tree(new Vector2(x,y)));
+                    this.SpawnGameObject(new Vector2(x, y), new Mountain(new Vector2(x, y)));
                 }
-
             }
         }
     }
@@ -92,6 +92,10 @@ export class World{
         //find nearest unoccupied position to place an item.
         //TODO:implement better
         console.log("gameObject spawned");
+        if(this.tiles[position.intX][position.intY] == undefined){
+            return;
+        }
+
 
         if(!this.tiles[position.intX][position.intY].occupied){
             this.gameObjects.push(gObject);

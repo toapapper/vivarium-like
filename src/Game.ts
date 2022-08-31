@@ -1,6 +1,6 @@
 import { Camera } from "./Camera.js";
 import { Vector2, Rectangle } from "./Maths.js";
-import { Color, TintImage } from "./ImageUtils.js"
+import { Color, ColorWhites } from "./ImageUtils.js"
 import { Creature, Species, FoodType, Attributes } from "./GameObjects/Creature.js";
 import { World } from "./World.js";
 import { NoiseMapGenerator } from "./Noise.js";
