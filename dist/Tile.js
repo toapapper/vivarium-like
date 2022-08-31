@@ -8,6 +8,7 @@ mountainImg.src = "./sprites/mountain_tile.png";
 export class Tile {
     constructor(position, type) {
         this.occupied = false;
+        this.occupiedBy = null;
         this.highlighted = false;
         switch (type) {
             case "grass":
@@ -21,6 +22,9 @@ export class Tile {
                 break;
         }
         this.rect = new Rectangle(position.x, position.y, 1, 1);
+    }
+    get position() {
+        return this.rect.position;
     }
     Draw(camera) {
         camera.DrawImage(this.imgPointer, this.rect);

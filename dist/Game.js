@@ -1,60 +1,40 @@
 import { Camera } from "./Camera.js";
-import { Vector2 } from "./Maths.js";
+import { Vector2, Rectangle } from "./Maths.js";
 import { Color } from "./ImageUtils.js";
-import { Creature } from "./Creature.js";
+import { Creature, Species, FoodType, Attributes } from "./GameObjects/Creature.js";
 import { World } from "./World.js";
 let canvas = document.getElementById("GameCanvas");
 let context = canvas.getContext("2d");
-let camera = new Camera(context, new Vector2(canvas.width, canvas.height));
-context.fillStyle = "#4d92d0";
+let camera = new Camera(context, new Rectangle(400, 400, 800, 800));
+context.fillStyle = "#ffffff";
 context.imageSmoothingEnabled = false;
 context.fillRect(0, 0, canvas.width, canvas.height);
-let tintedImg = new Image();
+//TESTSTUFF
 let testImg = new Image();
+let testSpecies;
 testImg.src = "./sprites/bear.png";
-let testCreature;
-let testCreature2;
 testImg.onload = function () {
-    testCreature = new Creature(new Vector2(3, -5), testImg, new Color(0, 255, 0));
-    testCreature2 = new Creature(new Vector2(-3, 4), testImg, new Color(255, 0, 0));
+    testSpecies = new Species("test1", Color.red, testImg, FoodType.herbivore, new Attributes(10, 10, 10, 10), 10); //temp
 };
 let world = new World(new Vector2(100, 100));
 world.GenerateNew();
 camera.viewport.position = world.size.multiply(.5);
+let TickInterval = 16;
 setInterval(function () {
     world.Draw(camera);
-    testCreature.Draw(camera);
-    testCreature2.Draw(camera);
-    camera.Update();
-}, 1000);
-// let mapGen:NoiseMapGenerator = new NoiseMapGenerator();
-//mapGen.setNoiseSeed("hej");
-// let mapSize = new Vector2(100,100);
-// let genRect = new Rectangle(0,0,1,1);
-// let waterLevel = -.2;
-// drawMap();
-// function drawMap(){
-//     mapGen.ResetCurrentMap();
-//     mapGen.GenerateNoiseMap(genRect, mapSize);
-//     // mapGen.GenerateNoiseMap(new Rectangle(genRect.x, genRect.y, genRect.size.x * 2, genRect.size.y * 2), mapSize);
-//     // mapGen.GenerateNoiseMap(new Rectangle(genRect.x, genRect.y, genRect.size.x * 2, genRect.size.y * 2), mapSize);
-//     mapGen.GenerateNoiseMap(new Rectangle(genRect.right, genRect.bottom, genRect.width * 2, genRect.width * 2), mapSize);
-//     mapGen.SinkEdges();
-//     mapGen.GenerateNoiseMap(new Rectangle(genRect.right, genRect.bottom, genRect.width * 4, genRect.width * 4), mapSize);
-//     mapGen.GenerateNoiseMap(new Rectangle(genRect.right, genRect.bottom, genRect.width * 6, genRect.width * 6), mapSize);
-//     mapGen.NormalizeMap();
-//     mapGen.GenerateBlueNoiseDots(genRect, waterLevel, 1, 4);
-//     // mapGen.GenerateNoiseMap(new Rectangle(genRect.right, genRect.bottom, genRect.width * 6, genRect.width * 6), mapSize);
-//     // mapGen.GenerateNoiseMap(genRect, mapSize);
-//     // mapGen.GenerateNoiseMap(new Rectangle(genRect.x, genRect.y, genRect.size.x * 2, genRect.size.y * 2), mapSize);
-//     mapGen.DrawCurrentMap(context, new Vector2(800,800), waterLevel);
-// }
+    world.Update();
+    camera.Render();
+}, TickInterval);
 document.addEventListener("click", function (event) {
     let clickPos = new Vector2(event.x - canvas.getBoundingClientRect().left, event.y - canvas.getBoundingClientRect().top);
     let wPos = Camera.main.ViewportToWorldPoint(clickPos);
     console.log(clickPos);
     console.log(wPos);
-    world.GetTileAt(Camera.main.ViewportToWorldPoint(clickPos)).highlighted = true;
+    let tile = World.Instance.GetTileAt(Camera.main.ViewportToWorldPoint(clickPos));
+    if (tile != undefined) {
+        let testCreature = new Creature(tile.position, testSpecies, new Attributes(10, 10, 2, 10));
+        world.SpawnGameObject(testCreature.position, testCreature);
+    }
 });
 document.addEventListener("keydown", function (event) {
     if (event.key === "a") {
@@ -94,6 +74,7 @@ document.addEventListener("keydown", function (event) {
     //     waterLevel -= .1;
     // }
     //drawMap();
-    camera.Update();
+    World.Instance.Draw(camera);
+    camera.Render();
 });
 //# sourceMappingURL=Game.js.map

@@ -2,15 +2,20 @@ import { Camera } from "./Camera.js";
 import { Rectangle, Vector2 } from "./Maths.js";
 import { NoiseMapGenerator } from "./Noise.js";
 import { Tile, TileType } from "./Tile.js";
-import { Creature } from "./Creature.js";
-import { GameObject } from "./GameObject.js";
+import { Creature } from "./GameObjects/Creature.js";
+import { GameObject } from "./GameObjects/GameObject.js";
 
 
 export class World{
 
     static Instance:World;
+    static MetabolismFactor:number = 1;//Editable by the player. All metabolism is increased by this amount.
 
-    tiles:Tile[][];
+    private removalCount:number = 0;
+    private removalResetAmount:number = 100;//number of removals of gameobjects that will trigger a cleanup of the gameobjects list
+
+
+    tiles:Tile[][]; // [x][y]
     gameObjects:GameObject[] = [];
     size:Vector2;
 
@@ -72,22 +77,57 @@ export class World{
         }
     }
 
+    //pixel
     GetTileAt(position:Vector2): Tile{
-        position = Camera.main.ViewportToWorldPoint(position);
         if(position.intX > 0 && position.intX < this.size.x && position.intY > 0 && position.intY < this.size.y){
             return this.tiles[position.intX][position.intY];
         }
 
         return undefined;
     }
-
+    
     SpawnGameObject(position:Vector2, gObject:GameObject){
         //find nearest unoccupied position to place an item.
+        //TODO:implement better
+        console.log("gameObject spawned");
+
+        if(!this.tiles[position.intX][position.intY].occupied){
+            this.gameObjects.push(gObject);
+            this.tiles[position.intX][position.intY].occupied = true;
+            this.tiles[position.intX][position.intY].occupiedBy = gObject;
+        }
     }
 
-    Update(dt:number): void{
+    RemoveGameObject(gameObject:GameObject){
+        console.log("gameObject removed");
+
+        for(let i:number = 0; i < this.gameObjects.length; i++){
+            if(this.gameObjects[i] === gameObject){
+                this.gameObjects[i] = null;
+            }
+        }
+
+        this.removalCount++;
+        if(this.removalCount >= this.removalResetAmount){
+            //Refactor gameObjects list
+
+            let nArray:GameObject[] = [];
+            this.gameObjects.forEach(element => {
+                if(element !== null){
+                    nArray.push(element);
+                }
+            });
+
+            this.gameObjects = nArray;
+        }
+
+    }
+
+    Update(): void{
         this.gameObjects.forEach(function(gObject:GameObject){
-            gObject.Update(dt);
+            if(gObject !== null){
+                gObject.Update();
+            }
         });
     }
 
@@ -99,7 +139,10 @@ export class World{
         });
 
         this.gameObjects.forEach(function(gObject:GameObject){
-            gObject.Draw(camera);
+            if(gObject !== null){
+                console.log("gameObject drawn");
+                gObject.Draw(camera);
+            }
         });
     }
 

@@ -1,68 +1,44 @@
 import { Camera } from "./Camera.js";
-import { Rectangle, Vector2 } from "./Maths.js";
+import { Vector2, Rectangle } from "./Maths.js";
 import { Color, TintImage } from "./ImageUtils.js"
-import { Creature } from "./Creature.js";
+import { Creature, Species, FoodType, Attributes } from "./GameObjects/Creature.js";
 import { World } from "./World.js";
 import { NoiseMapGenerator } from "./Noise.js";
+import { Tile } from "./Tile.js";
 
 let canvas: HTMLCanvasElement = document.getElementById("GameCanvas") as HTMLCanvasElement;
 let context: CanvasRenderingContext2D = canvas.getContext("2d");
 
-let camera = new Camera(context, new Vector2(canvas.width, canvas.height));
+let camera = new Camera(context, new Rectangle(400, 400, 800, 800));
 
-context.fillStyle = "#4d92d0";
+context.fillStyle = "#ffffff";
 context.imageSmoothingEnabled = false;
 context.fillRect(0,0, canvas.width, canvas.height);
 
 
-let tintedImg = new Image();
+//TESTSTUFF
 let testImg = new Image();
+let testSpecies:Species;
 testImg.src = "./sprites/bear.png";
-
-let testCreature:Creature;
-let testCreature2:Creature;
-
 testImg.onload = function(){
-    testCreature = new Creature(new Vector2(3, -5), testImg, new Color(0,255,0));
-    testCreature2 = new Creature(new Vector2(-3, 4), testImg, new Color(255,0,0));
+    testSpecies = new Species("test1", Color.red, testImg, FoodType.herbivore, new Attributes(10, 10, 10, 10), 10);//temp
 }
+
 
 let world:World = new World(new Vector2(100,100));
 world.GenerateNew();
 camera.viewport.position = world.size.multiply(.5);
 
+
+
+let TickInterval:number = 16;
+
 setInterval(function(){
     world.Draw(camera);
-    testCreature.Draw(camera);
-    testCreature2.Draw(camera);
-    camera.Update();
-}, 1000);
+    world.Update();
+    camera.Render();
+}, TickInterval);
 
-// let mapGen:NoiseMapGenerator = new NoiseMapGenerator();
-//mapGen.setNoiseSeed("hej");
-
-// let mapSize = new Vector2(100,100);
-// let genRect = new Rectangle(0,0,1,1);
-// let waterLevel = -.2;
-
-// drawMap();
-
-// function drawMap(){
-//     mapGen.ResetCurrentMap();
-//     mapGen.GenerateNoiseMap(genRect, mapSize);
-//     // mapGen.GenerateNoiseMap(new Rectangle(genRect.x, genRect.y, genRect.size.x * 2, genRect.size.y * 2), mapSize);
-//     // mapGen.GenerateNoiseMap(new Rectangle(genRect.x, genRect.y, genRect.size.x * 2, genRect.size.y * 2), mapSize);
-//     mapGen.GenerateNoiseMap(new Rectangle(genRect.right, genRect.bottom, genRect.width * 2, genRect.width * 2), mapSize);
-//     mapGen.SinkEdges();
-//     mapGen.GenerateNoiseMap(new Rectangle(genRect.right, genRect.bottom, genRect.width * 4, genRect.width * 4), mapSize);
-//     mapGen.GenerateNoiseMap(new Rectangle(genRect.right, genRect.bottom, genRect.width * 6, genRect.width * 6), mapSize);
-//     mapGen.NormalizeMap();
-//     mapGen.GenerateBlueNoiseDots(genRect, waterLevel, 1, 4);
-//     // mapGen.GenerateNoiseMap(new Rectangle(genRect.right, genRect.bottom, genRect.width * 6, genRect.width * 6), mapSize);
-//     // mapGen.GenerateNoiseMap(genRect, mapSize);
-//     // mapGen.GenerateNoiseMap(new Rectangle(genRect.x, genRect.y, genRect.size.x * 2, genRect.size.y * 2), mapSize);
-//     mapGen.DrawCurrentMap(context, new Vector2(800,800), waterLevel);
-// }
 
 document.addEventListener("click", function(event:MouseEvent){
     
@@ -72,7 +48,13 @@ document.addEventListener("click", function(event:MouseEvent){
     console.log(clickPos);
     console.log(wPos);
 
-    world.GetTileAt(Camera.main.ViewportToWorldPoint(clickPos)).highlighted = true;
+    let tile:Tile = World.Instance.GetTileAt(Camera.main.ViewportToWorldPoint(clickPos));
+    if(tile != undefined){
+
+        let testCreature = new Creature(tile.position, testSpecies, new Attributes(10,10,2,10));
+        world.SpawnGameObject(testCreature.position, testCreature);
+    }
+
 });
 
 document.addEventListener("keydown", function(event:KeyboardEvent){
@@ -114,5 +96,6 @@ document.addEventListener("keydown", function(event:KeyboardEvent){
     // }
 
     //drawMap();
-    camera.Update();
+    World.Instance.Draw(camera);
+    camera.Render();
 })

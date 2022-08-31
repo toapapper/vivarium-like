@@ -57,11 +57,23 @@ export class Rectangle {
     get bottomLeft() { return new Vector2(this.left, this.bottom); }
     get bottomRight() { return new Vector2(this.right, this.bottom); }
     get points() { return [this.topLeft, this.topRight, this.bottomLeft, this.bottomRight]; }
-    contains(point) {
-        if (point.x > this.left && point.x < this.right && point.y > this.top && point.y < this.bottom) {
+    //inclusive contain (two equal rects would contain each other)
+    containsPoint(point) {
+        if (point.x >= this.left && point.x <= this.right && point.y >= this.top && point.y <= this.bottom) {
             return true;
         }
         return false;
+    }
+    containsRect(rect) {
+        if (this.containsPoint(rect.topLeft)
+            && this.containsPoint(rect.topRight)
+            && this.containsPoint(rect.bottomRight)
+            && this.containsPoint(rect.bottomLeft)) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     intersects(other) {
         //checks if either one is to the left of the other or above, if not they must be intersecting

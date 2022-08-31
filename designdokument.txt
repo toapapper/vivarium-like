@@ -1,0 +1,62 @@
+Hur spelet funkar och spelar:
+
+Kort beskrivning:
+Du kan som spelare styra och ställa fritt i en liten sandlåda där djur som utvecklas enligt evolutionens principer lever.
+Inte bara djurens attribut som styrka och snabbhet utvecklas utan även deras beslutsförmåga.
+
+För att hålla allt simpelt kan de olika djuren ha värdena 1-16 i en rad olika attribut som inte har med deras beslutsförmåga att göra.
+Varje attribut medför en nackdel i att för varje poäng ökar djurets matförbränningshastighet.
+Alla attribut har ett begränsat max-värde baserat på djurets storlek
+Attribut:
+* Styrka (Hur mycket den skadar och hur mycket liv den har)
+* Storlek (Hur mkt liv den har, hur mkt plats den har i magen, hur snabbt den kan äta, och hur snabbt den kan omvandla maten till energi men också hur mkt energi det kostar att gå)
+* Snabbhet (Hur snabbt det går innan den kan flytta sig en ruta igen. Också därför hur snabbt det går innan den gör en ny sökning igenom sitt beslutsträd. Bör också minska energikostnaden av att gå)
+* Sinnesintrycksavstånd (Hur långt den kan se)
+
+Spelaren kan också justera hur mkt växtnäring som finns att tillgås. Ett fritt valt nummer kan spelaren sätta det till. Det påverkar 
+då hur ofta äpplen visar sig på spelplanen. Vilket de gör slumpmässigt på alla gräsplan.
+
+AI:
+Deras AI består av ett "decision tree", hädanefter beslutsträd, vilket är en slags ai som fungerar genom att den går
+igenom ett träd av noder som alla påverkar vilken väg som tas. När en slutnod nås bestämmer den beteendet.
+Första implementationen kommer vara en extremt simplifierat beslutsträdsarkitektur som knappt kan kallas decision tree egentligen.
+
+OK skit i beslutsträd. Det är binära träd.
+
+Olika noder i beslutsträdet:
+    Mellannoder:
+
+    Conditionals: (Bör lägga till flera, som t.ex. kollar djuret man tittar pås hastighet eller vikt eller styrka)
+        * Foreign creature within distance
+        * Familiar creature within distance (foreign and familiar in this case describing wether they are of the same species as this one or not)
+        * Fruit/corpse within distance(depending on food-type)
+
+    Lövnoder:
+        Actions:
+        * Eat it (it being the last entitiy used in a conditional that lead to this node, else it picks one nearby at random, that either is or isnt foreign depending on the leaf action)
+        * Attack it (When it attacks, if it is not next to the target, but one tile away, it moves one tile before, or it might be too hard for creatures to hunt)
+        * walk away from it
+        * walk towards it
+        * walk to the side of it + other side version
+        * walk randomly (väljer en riktning att gå i och håller den för varje gång walk randomly väljs i rad. Bryts raden väljs en ny riktning nästa gång)
+        * do nothing
+
+    
+Mat och energi:
+
+    Alla djuren är en av tre olika typer av matätare:
+    * Köttätare - Kan bara äta lik
+    * Växtätare - Kan bara äta växter
+    * Allätare  - Kan äta båda två men får ut lite mindre energi per matenhet av båda mattyperna.
+
+    Äpplen som föder växtätare finns att hitta runt om på banan. Det spawnas slumpmässigt på gräsrutor. Hur ofta det händer kan spelaren själv ändra.
+
+    Kött fås från lik. Lik fås genom att ett djur dör pga naturliga orsaker som t. ex. svält eller ålder eller genom att ett djur blir mördat av ett annat.
+
+    Ett djur behöver energi för att leva. Energi är samma sak som mat i magen. hur snabbt den förbränns är inte en faktor vi simulerar. 
+    Djuren har ett energilager som går mellan 0 och ett antal bestämt av deras storlek. Blir det tomt så dör djuret. Varje tick så förbränns en viss mängd energi.
+    Samtidigt så omvandlas en viss mängd mat de har i magen till energi varje tick också. Beroende på hur stora de är kanske.
+    Det kostar också en viss mängd energi att gå, baserat på storleken av djuret.
+
+    Att attackera är gratis.
+    

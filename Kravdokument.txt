@@ -46,3 +46,22 @@ Minne? Större minne>större huvud, dyrare att föda.
 Samma med storlek på beslutsträdet kanske?
 
 Ska kunna ladda ett beslutsträd från antingen en simpel sträng av siffror eller en json-fil
+
+
+
+
+Djur:
+    Species: Dikterar utseende
+    Beteende: 
+    Attribut{
+        Storlek,
+        Styrka,
+        Fart,
+        Sinnesintrycksavstånd
+    }
+Skit i att göra det separat.
+
+Framtida ideer:
+    Supermutation händer ibland. Det gör att det födda djuret blir en helt ny art. Det föds med samma sorts stats och beteende som det hade gjort annars.
+    Den nya arten kan fortfarande föröka sig med den gamla i ett antal generationer. Av barnen som föds av föräldrar från två olika arter så är den nyare arten lite vanligare.
+    På så sätt skulle man kunna få två populationer av samma art som splittras att omvandlas till olika arter över tid.

@@ -4,9 +4,12 @@ let imgCanvasContext: CanvasRenderingContext2D = imgCanvas.getContext("2d");
 
 /** values range between 0 and 255 */
 export class Color{
-    static get white(): Color{ return new Color(255, 255, 255); }
-    static get black(): Color{ return new Color(0,0,0); }
-    static get magenta(): Color{ return new Color(255, 0, 255); }
+    static get white():Color{ return new Color(255, 255, 255); }
+    static get black():Color{ return new Color(0,0,0); }
+    static get magenta():Color{ return new Color(255, 0, 255); }
+    static get red():Color{ return new Color(255, 0, 0); }
+    static get blue():Color{ return new Color(0,0,255); }
+    static get green():Color{ return new Color(0, 255, 0); }
     
     r: number;
     g: number;

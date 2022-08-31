@@ -84,11 +84,24 @@ export class Rectangle{
         this.height = height;
     }
 
-    contains(point: Vector2): boolean{
-        if(point.x > this.left && point.x < this.right && point.y > this.top && point.y < this.bottom){
+    //inclusive contain (two equal rects would contain each other)
+    containsPoint(point: Vector2): boolean{
+        if(point.x >= this.left && point.x <= this.right && point.y >= this.top && point.y <= this.bottom){
             return true;
         }
         return false;
+    }
+
+    containsRect(rect: Rectangle):boolean{
+        if(this.containsPoint(rect.topLeft)
+        && this.containsPoint(rect.topRight) 
+        && this.containsPoint(rect.bottomRight) 
+        && this.containsPoint(rect.bottomLeft)){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     intersects(other: Rectangle): boolean{

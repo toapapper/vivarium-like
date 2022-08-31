@@ -1,5 +1,6 @@
 import { Vector2, Rectangle } from "./Maths.js";
 import { Camera } from "./Camera.js";
+import { GameObject } from "./GameObjects/GameObject.js"
 
 
 let grassImg:HTMLImageElement = new Image();
@@ -15,8 +16,13 @@ export type TileType = "grass"|"water"|"mountain";
 export class Tile{
     rect:Rectangle;
     imgPointer:HTMLImageElement;
+
+    get position():Vector2{
+        return this.rect.position;
+    }
     
     occupied:boolean = false;
+    occupiedBy:GameObject = null;
     highlighted:boolean = false;
 
     constructor(position:Vector2, type:TileType){

@@ -22,29 +22,26 @@ export class Camera{
     /** one in game tile is dimensioned one by one, the size is how many tiles fit into the viewport at one time  */
     viewport: Rectangle = new Rectangle(0, 0, 100, 100);
     context: CanvasRenderingContext2D;
-    readonly resolution: Vector2;
+    readonly canvas:Rectangle;
 
     drawCalls:DrawCall[];
 
-    backgroundColor:Color = Color.fromHex("#4d92d0");
-    
+    backgroundColor:Color = Color.black;
+
     /** the pixel size of one unit */
     get scale():number { 
         if(this.viewport.width > this.viewport.height){
-            return this.resolution.x / this.viewport.width; 
+            return this.canvas.width / this.viewport.width; 
         }
         else{
-            return this.resolution.y / this.viewport.height;
+            return this.canvas.height / this.viewport.height;
         }
     }
 
-    set setResolution(value: Vector2){
-        //not implemented, change the viewport if the resolution does not change uniformly
-    }
-
-    constructor(context:CanvasRenderingContext2D, resolution: Vector2){
+    //canvas is assumed to be square
+    constructor(context:CanvasRenderingContext2D, canvas:Rectangle){
         this.context = context;
-        this.resolution = resolution;
+        this.canvas = canvas;
         this.drawCalls = [];
 
         Camera.main = this;
@@ -52,20 +49,20 @@ export class Camera{
 
     DrawImage(img: CanvasImageSource, rect: Rectangle){
         //if they dont intersect it wont be visible anyway
-        if(rect.intersects(this.viewport)){
+        if(this.viewport.containsRect(rect)){
             this.drawCalls.push({img, rect});
         }
     }
 
     //clears screen and draws all drawcalls
-    Update(){
+    Render(){
         this.context.fillStyle = this.backgroundColor.toHex();
-        this.context.fillRect(0,0,this.resolution.x, this.resolution.y);
+        this.context.fillRect(this.canvas.left, this.canvas.top, this.canvas.width, this.canvas.height);
 
         let _this = this;
         this.drawCalls.forEach(function(drawCall:DrawCall){
             drawCall.rect = _this.WorldToViewportRect(drawCall.rect);
-            _this.context.drawImage(drawCall.img, drawCall.rect.left, drawCall.rect.top, drawCall.rect.width, drawCall.rect.height);
+            _this.context.drawImage(drawCall.img, drawCall.rect.left + _this.canvas.left, drawCall.rect.top + _this.canvas.top, drawCall.rect.width, drawCall.rect.height);
         });
 
         this.drawCalls = [];
@@ -77,12 +74,11 @@ export class Camera{
 
     /** Positive numbers zoom closer */
     Zoom(amount:number){
-        if((this.viewport.size.x <= 10 || this.viewport.size.y <= 10) && amount > 0){
+        if((this.viewport.size.x <= 10 || this.viewport.size.y <= 10) && amount > 0){ //limit zoom
             return;
         }
         
-        let ratio:number = this.resolution.y/this.resolution.x;
-        this.viewport.size = new Vector2(this.viewport.width - amount, this.viewport.height - amount * ratio);
+        this.viewport.size = new Vector2(this.viewport.width - amount, this.viewport.height - amount);
     }
 
     WorldToViewportRect(rect: Rectangle): Rectangle{
@@ -97,9 +93,8 @@ export class Camera{
     /** world to pixel viewport position */
     WorldToViewportPoint(vector: Vector2): Vector2{
         let outVector = vector.subtract(this.viewport.position);
-
         outVector = outVector.multiply(this.scale);
-        outVector = outVector.add(this.resolution.divide(2));
+        outVector = outVector.add(this.canvas.size.divide(2));
 
         return outVector;
     }
@@ -109,8 +104,9 @@ export class Camera{
      * @param viewPortPoint Given in pixels
      */
     ViewportToWorldPoint(viewportPoint: Vector2): Vector2{
-        //let outVector = viewportPoint.subtract(this.resolution.divide(2));
-        let outVector = viewportPoint.multiply(this.viewport.x / this.resolution.x);
+        let outVector = viewportPoint.subtract(this.canvas.size.divide(2));
+        //outVector = viewportPoint.multiply(this.viewport.x / this.resolution.x);
+        outVector = outVector.divide(this.scale);
         outVector = outVector.add(this.viewport.position);
 
         return outVector;

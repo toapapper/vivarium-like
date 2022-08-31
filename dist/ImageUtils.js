@@ -12,6 +12,9 @@ export class Color {
     static get white() { return new Color(255, 255, 255); }
     static get black() { return new Color(0, 0, 0); }
     static get magenta() { return new Color(255, 0, 255); }
+    static get red() { return new Color(255, 0, 0); }
+    static get blue() { return new Color(0, 0, 255); }
+    static get green() { return new Color(0, 255, 0); }
     static fromHex(hex) {
         let color = new Color(0, 0, 0);
         //copy pasted from https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb

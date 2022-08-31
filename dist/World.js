@@ -1,12 +1,13 @@
-import { Camera } from "./Camera.js";
 import { Rectangle, Vector2 } from "./Maths.js";
 import { NoiseMapGenerator } from "./Noise.js";
 import { Tile } from "./Tile.js";
 export class World {
     constructor(size) {
-        this.tiles = [];
+        this.removalCount = 0;
+        this.removalResetAmount = 100; //number of removals of gameobjects that will trigger a cleanup of the gameobjects list
         this.gameObjects = [];
         this.size = size;
+        World.Instance = this;
     }
     /*
     *   TODO:
@@ -55,8 +56,8 @@ export class World {
             }
         }
     }
+    //pixel
     GetTileAt(position) {
-        position = Camera.main.ViewportToWorldPoint(position);
         if (position.intX > 0 && position.intX < this.size.x && position.intY > 0 && position.intY < this.size.y) {
             return this.tiles[position.intX][position.intY];
         }
@@ -64,6 +65,39 @@ export class World {
     }
     SpawnGameObject(position, gObject) {
         //find nearest unoccupied position to place an item.
+        //TODO:implement better
+        console.log("gameObject spawned");
+        if (!this.tiles[position.intX][position.intY].occupied) {
+            this.gameObjects.push(gObject);
+            this.tiles[position.intX][position.intY].occupied = true;
+            this.tiles[position.intX][position.intY].occupiedBy = gObject;
+        }
+    }
+    RemoveGameObject(gameObject) {
+        console.log("gameObject removed");
+        for (let i = 0; i < this.gameObjects.length; i++) {
+            if (this.gameObjects[i] === gameObject) {
+                this.gameObjects[i] = null;
+            }
+        }
+        this.removalCount++;
+        if (this.removalCount >= this.removalResetAmount) {
+            //Refactor gameObjects list
+            let nArray = [];
+            this.gameObjects.forEach(element => {
+                if (element !== null) {
+                    nArray.push(element);
+                }
+            });
+            this.gameObjects = nArray;
+        }
+    }
+    Update() {
+        this.gameObjects.forEach(function (gObject) {
+            if (gObject !== null) {
+                gObject.Update();
+            }
+        });
     }
     Draw(camera) {
         this.tiles.forEach(function (column) {
@@ -71,9 +105,13 @@ export class World {
                 tile.Draw(camera);
             });
         });
-        // this.gameObjects.forEach(function(gObject:GameObject){
-        //     gObject.Draw(camera);
-        // });
+        this.gameObjects.forEach(function (gObject) {
+            if (gObject !== null) {
+                console.log("gameObject drawn");
+                gObject.Draw(camera);
+            }
+        });
     }
 }
+World.MetabolismFactor = 1; //Editable by the player. All metabolism is increased by this amount.
 //# sourceMappingURL=World.js.map

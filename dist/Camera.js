@@ -8,41 +8,39 @@ import { Color } from "./ImageUtils.js";
     på så sätt behöver jag inte lägga till de permanenta sakerna hela tiden. och det som ska animeras kan ändå.
 */
 export class Camera {
-    constructor(context, resolution) {
+    //canvas is assumed to be square
+    constructor(context, canvas) {
         /** one in game tile is dimensioned one by one, the size is how many tiles fit into the viewport at one time  */
         this.viewport = new Rectangle(0, 0, 100, 100);
-        this.backgroundColor = Color.fromHex("#4d92d0");
+        this.backgroundColor = Color.black;
         this.context = context;
-        this.resolution = resolution;
+        this.canvas = canvas;
         this.drawCalls = [];
         Camera.main = this;
     }
     /** the pixel size of one unit */
     get scale() {
         if (this.viewport.width > this.viewport.height) {
-            return this.resolution.x / this.viewport.width;
+            return this.canvas.width / this.viewport.width;
         }
         else {
-            return this.resolution.y / this.viewport.height;
+            return this.canvas.height / this.viewport.height;
         }
-    }
-    set setResolution(value) {
-        //not implemented, change the viewport if the resolution does not change uniformly
     }
     DrawImage(img, rect) {
         //if they dont intersect it wont be visible anyway
-        if (rect.intersects(this.viewport)) {
+        if (this.viewport.containsRect(rect)) {
             this.drawCalls.push({ img, rect });
         }
     }
     //clears screen and draws all drawcalls
-    Update() {
+    Render() {
         this.context.fillStyle = this.backgroundColor.toHex();
-        this.context.fillRect(0, 0, this.resolution.x, this.resolution.y);
+        this.context.fillRect(this.canvas.left, this.canvas.top, this.canvas.width, this.canvas.height);
         let _this = this;
         this.drawCalls.forEach(function (drawCall) {
             drawCall.rect = _this.WorldToViewportRect(drawCall.rect);
-            _this.context.drawImage(drawCall.img, drawCall.rect.left, drawCall.rect.top, drawCall.rect.width, drawCall.rect.height);
+            _this.context.drawImage(drawCall.img, drawCall.rect.left + _this.canvas.left, drawCall.rect.top + _this.canvas.top, drawCall.rect.width, drawCall.rect.height);
         });
         this.drawCalls = [];
     }
@@ -51,11 +49,10 @@ export class Camera {
     }
     /** Positive numbers zoom closer */
     Zoom(amount) {
-        if ((this.viewport.size.x <= 10 || this.viewport.size.y <= 10) && amount > 0) {
+        if ((this.viewport.size.x <= 10 || this.viewport.size.y <= 10) && amount > 0) { //limit zoom
             return;
         }
-        let ratio = this.resolution.y / this.resolution.x;
-        this.viewport.size = new Vector2(this.viewport.width - amount, this.viewport.height - amount * ratio);
+        this.viewport.size = new Vector2(this.viewport.width - amount, this.viewport.height - amount);
     }
     WorldToViewportRect(rect) {
         let outRect = new Rectangle(0, 0, 0, 0);
@@ -67,7 +64,7 @@ export class Camera {
     WorldToViewportPoint(vector) {
         let outVector = vector.subtract(this.viewport.position);
         outVector = outVector.multiply(this.scale);
-        outVector = outVector.add(this.resolution.divide(2));
+        outVector = outVector.add(this.canvas.size.divide(2));
         return outVector;
     }
     /**
@@ -75,8 +72,9 @@ export class Camera {
      * @param viewPortPoint Given in pixels
      */
     ViewportToWorldPoint(viewportPoint) {
-        //let outVector = viewportPoint.subtract(this.resolution.divide(2));
-        let outVector = viewportPoint.multiply(this.viewport.x / this.resolution.x);
+        let outVector = viewportPoint.subtract(this.canvas.size.divide(2));
+        //outVector = viewportPoint.multiply(this.viewport.x / this.resolution.x);
+        outVector = outVector.divide(this.scale);
         outVector = outVector.add(this.viewport.position);
         return outVector;
     }
