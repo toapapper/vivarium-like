@@ -27,7 +27,7 @@ testImg.onload = function(){
 
 let world:World = new World(new Vector2(100,100));
 world.GenerateNew();
-camera.viewport.position = world.size.multiply(.5);
+camera.Move(world.size.multiply(.5));
 
 
 
@@ -41,10 +41,10 @@ setInterval(function(){
 
 
 document.addEventListener("click", function(event:MouseEvent){
-    
+
     let clickPos:Vector2 = new Vector2(event.x - canvas.getBoundingClientRect().left, event.y - canvas.getBoundingClientRect().top);
     let wPos = Camera.main.ViewportToWorldPoint(clickPos);
-    
+
     console.log(clickPos);
     console.log(wPos);
 

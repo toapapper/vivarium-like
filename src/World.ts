@@ -68,11 +68,13 @@ export class World{
                 if(height < waterLevel){
                     type = "water";
                 }
-                else if(height == 2){
-                    type = "mountain";//Spawna ett träd egentligen
-                }
 
                 this.tiles[x].push(new Tile(new Vector2(x, y), type));
+
+                if(height == 2){
+                    this.Plants.push(new Tree(new Vector2(x,y)));
+                }
+
             }
         }
     }
@@ -85,7 +87,7 @@ export class World{
 
         return undefined;
     }
-    
+
     SpawnGameObject(position:Vector2, gObject:GameObject){
         //find nearest unoccupied position to place an item.
         //TODO:implement better

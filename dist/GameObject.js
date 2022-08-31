@@ -21,9 +21,13 @@ export class Tree extends GameObject {
     constructor(position, appleTimerMin, appleTimerMax) {
         super(position);
         this.appleTimer = 0;
+        this.appleTimerMin = 20;
+        this.appleTimerMax = 60;
         this.sprite = treeSprite;
-        this.appleTimerMin = appleTimerMin;
-        this.appleTimerMax = appleTimerMax;
+        if (appleTimerMin)
+            this.appleTimerMin = appleTimerMin;
+        if (appleTimerMax)
+            this.appleTimerMax = appleTimerMax;
     }
     ResetAppleTimer() {
         this.appleTimer = (Math.random() * (this.appleTimerMin - this.appleTimerMax)) + this.appleTimerMin;

@@ -1,0 +1,26 @@
+----VIVARIUM-LIKE----
+By vivarium i mean an old game my dad played on his mac more than 20 years ago. 
+That game was an evolutionary sandbox game where you controlled a world inhabited by animals whose ai evolves from parent to child.
+
+The goal of this game is to build something similar and hopefully more advanced than what i described above.
+When it comes to the gameplay it should be passiv. I think of players playing this game by having it running in the background
+checking in on their world every now and then to see how the animals and echo-system has evolved.
+
+
+
+For the initial release:
+Trees, apples, animals.
+
+
+Animals can eat anything nutritious they find they have no dietary preferences(maybe they should, could just have three numbers adjusting the nutrition they gain from each)
+
+
+
+
+----NOTES----
+Istället för att djuren bara ska ha olika färger så gör jag så de får ett helt eget mönster, som håller sig innanför deras sprite.
+Mönstret genereras av ett seed som är en del av djurets genetik.
+Skulle kunna funka så att mönstret får innehålla mellan 2 och 5 färger(kan behöva begränsas beroend på hur stor en siffra kan vara).
+resten av siffrorna i seeden kan sedan användas till en slags slumpgenerator för att bilda mönstret.
+Ända kravet på "slump"generatorn är att lika seeds bör ge lika bilder, vilket de gör den oslumpig. Kan behöva skriva en egen därför.
+Kanske finns några algoritmer för att skapa prickiga/randiga, eller liknande, mönster.

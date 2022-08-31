@@ -12,6 +12,8 @@ type DrawCall = {
     genom att dela ut drawcall-ids och sedan tar jag inte bort de olika drawcalls om inte det förfrågas
     kan däremot ändra dem.
     på så sätt behöver jag inte lägga till de permanenta sakerna hela tiden. och det som ska animeras kan ändå.
+
+    Ha ett system där man bara lägger till saker här som man vill ska ritas sen går den igenom dem och ritar dem i uppdate.
 */
 
 
@@ -24,14 +26,14 @@ export class Camera{
     context: CanvasRenderingContext2D;
     readonly canvas:Rectangle;
 
-    drawCalls:DrawCall[];
+    private drawCalls:DrawCall[];
 
     backgroundColor:Color = Color.black;
 
     /** the pixel size of one unit */
-    get scale():number { 
+    get scale():number {
         if(this.viewport.width > this.viewport.height){
-            return this.canvas.width / this.viewport.width; 
+            return this.canvas.width / this.viewport.width;
         }
         else{
             return this.canvas.height / this.viewport.height;
@@ -43,6 +45,7 @@ export class Camera{
         this.context = context;
         this.canvas = canvas;
         this.drawCalls = [];
+        this.viewport.position = position;
 
         Camera.main = this;
     }
@@ -77,7 +80,7 @@ export class Camera{
         if((this.viewport.size.x <= 10 || this.viewport.size.y <= 10) && amount > 0){ //limit zoom
             return;
         }
-        
+
         this.viewport.size = new Vector2(this.viewport.width - amount, this.viewport.height - amount);
     }
 
@@ -100,7 +103,7 @@ export class Camera{
     }
 
     /**
-     * 
+     *
      * @param viewPortPoint Given in pixels
      */
     ViewportToWorldPoint(viewportPoint: Vector2): Vector2{
