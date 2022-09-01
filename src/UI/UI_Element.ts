@@ -1,20 +1,23 @@
+import { Color } from "../ImageUtils";
 import { Rectangle } from "../Maths";
 
-//Do it all class for ui
+
+
+//Do it all(except text. The text class is below this one) class for ui 
 export class UI_Element{
 
     rect:Rectangle;
     text:string;
+    textSize:number;
+    textColor:Color;
     image:HTMLImageElement;
     elements:UI_Element[];
 
-    constructor(rect:Rectangle, text?:string, image?:HTMLImageElement, elements?:UI_Element[]){
+    
+    constructor(rect:Rectangle, image?:HTMLImageElement, elements?:UI_Element[]){
         this.rect = rect;	
         
-        if(text != undefined)
-            this.text = text;
-
-        if(image != undefined) 
+        if(image != undefined)
             this.image = image;
 
         if(elements != undefined)
@@ -22,6 +25,7 @@ export class UI_Element{
         
     }
     
+
     draw(context:CanvasRenderingContext2D , parentRect?:Rectangle){
         let drawRect = this.rect;
         if(parentRect != undefined){
@@ -46,7 +50,25 @@ export class UI_Element{
         context.drawImage(this.image, this.rect.top, this.rect.left, this.rect.width, this.rect.height);
     }
 
+    /** Draws text  */
     private drawText(context:CanvasRenderingContext2D, drawRect:Rectangle){
-        context.fillText(this.text, this.rect.top, this.rect.left)
+        context.fillStyle = this.textColor.toHex();
+        context.fillText(this.text, this.rect.top, this.rect.left);
     }
+}
+
+
+
+
+export class UI_TextElement extends UI_Element{
+
+    constructor(rect:Rectangle, )
+    
+    setText(text:string, textSize:number, textColor:Color):void{
+        this.text = text;
+        this.textSize = textSize;
+        this.textColor = textColor;
+    }
+
+
 }
