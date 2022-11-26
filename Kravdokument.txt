@@ -23,10 +23,33 @@ Ruta
     Kan finnas en entity per ruta endast.
     Kan finnas fler än ett item per ruta.
 
-Entity 
-    id
-    ruta
-    position
+Entity
+    id : int
+    ruta : ruta
+
+Animal:entity
+    AI-controller
+    genes (controlls stats when reproducing)
+    health : float
+    food : float //1 food ger 1 energy om man inte har över 100 energy då minskar effektiviten. Omvandlas till energy lite i taget varje tick.
+    energy : float
+    moveCD : byte //cooldowns. in ticks.
+    attackCD : byte
+
+Move (struct)
+    animalID : int
+    direction : directionEnum //inget, upp, ner, höger, vänster + diagonaler.
+    running : bool
+    attack : bool
+
+AIController
+    animalID : int
+    Ai : AI
+    ---
+    Think : Move
+
+AI (interface)
+
 
 
 Camera

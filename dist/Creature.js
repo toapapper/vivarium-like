@@ -1,4 +1,4 @@
-import { TintImage } from "./ImageUtils.js";
+import { ColorWhites } from "./ImageUtils.js";
 import { GameObject } from "./GameObject.js";
 import { AgentActions } from "./Ai.js";
 /**
@@ -7,7 +7,7 @@ import { AgentActions } from "./Ai.js";
 export class Creature extends GameObject {
     constructor(position, sprite, tint) {
         super(position);
-        this.sprite = TintImage(sprite, tint);
+        this.sprite = ColorWhites(sprite, tint);
     }
     /** run ai, evaluate next action. Could have a "reactionTime-cooldown on evaluating a new one. Could save on performance." */
     GetAgentAction() {

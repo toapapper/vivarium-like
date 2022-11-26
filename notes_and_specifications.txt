@@ -17,10 +17,13 @@ Animals can eat anything nutritious they find they have no dietary preferences(m
 
 
 
-----NOTES----
+----IDÉER----
 Istället för att djuren bara ska ha olika färger så gör jag så de får ett helt eget mönster, som håller sig innanför deras sprite.
 Mönstret genereras av ett seed som är en del av djurets genetik.
 Skulle kunna funka så att mönstret får innehålla mellan 2 och 5 färger(kan behöva begränsas beroend på hur stor en siffra kan vara).
 resten av siffrorna i seeden kan sedan användas till en slags slumpgenerator för att bilda mönstret.
 Ända kravet på "slump"generatorn är att lika seeds bör ge lika bilder, vilket de gör den oslumpig. Kan behöva skriva en egen därför.
 Kanske finns några algoritmer för att skapa prickiga/randiga, eller liknande, mönster.
+
+
+Försök sätta en riktlinje för hur långt ett naturligt liv är i spelet. T.ex. ett djur som lever upp till 15 år, typ en hund, kanske bör leva sin livstid 15 minuter i spelet. Under den livstiden ska den i snitt ha kunnat föröka sig ett visst antal gånger, och behövt jaga och döda ett visst antal andra djur. etc...
