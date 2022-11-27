@@ -6,17 +6,6 @@ type DrawCall = {
     rect: Rectangle
 };
 
-/*
-*   TODO:
-    Gör mer effektiv, om inte animering ska vara en större och konstantare del av det visuella,
-    genom att dela ut drawcall-ids och sedan tar jag inte bort de olika drawcalls om inte det förfrågas
-    kan däremot ändra dem.
-    på så sätt behöver jag inte lägga till de permanenta sakerna hela tiden. och det som ska animeras kan ändå.
-
-    Ha ett system där man bara lägger till saker här som man vill ska ritas sen går den igenom dem och ritar dem i uppdate.
-*/
-
-
 export class Camera{
     /** Singleton instance of the camera. as of yet no need for more than one per game. */
     static main:Camera;
@@ -65,7 +54,7 @@ export class Camera{
         let _this = this;
         this.drawCalls.forEach(function(drawCall:DrawCall){
             drawCall.rect = _this.WorldToViewportRect(drawCall.rect);
-            _this.context.drawImage(drawCall.img, drawCall.rect.left + _this.canvas.left, drawCall.rect.top + _this.canvas.top, drawCall.rect.width, drawCall.rect.height);
+            _this.context.drawImage(drawCall.img, drawCall.rect.left, drawCall.rect.top, drawCall.rect.width, drawCall.rect.height);
         });
 
         this.drawCalls = [];
@@ -89,7 +78,7 @@ export class Camera{
 
         outRect.position = this.WorldToViewportPoint(rect.position);
         outRect.size = rect.size.multiply(this.scale);
-
+        outRect.position = outRect.position.add(this.canvas.topLeft);
         return outRect;
     }
 
@@ -108,9 +97,10 @@ export class Camera{
      */
     ViewportToWorldPoint(viewportPoint: Vector2): Vector2{
         let outVector = viewportPoint.subtract(this.canvas.size.divide(2));
-        //outVector = viewportPoint.multiply(this.viewport.x / this.resolution.x);
+        outVector = outVector.subtract(this.canvas.topLeft);
         outVector = outVector.divide(this.scale);
         outVector = outVector.add(this.viewport.position);
+
 
         return outVector;
     }

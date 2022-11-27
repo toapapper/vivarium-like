@@ -5,6 +5,7 @@ import { GameObject, Edible} from "./GameObject.js";
 import { AgentActionTypes, AI, AgentAction } from "../AI/AI.js";
 import { World } from "../World.js";
 import { Tile } from "../Tile.js"
+import {Attributes} from "./Attributes.js"
 
 export enum FoodType{
     herbivore,
@@ -12,52 +13,6 @@ export enum FoodType{
     carnivore
 }
 
-let MAX_ATTRIBUTE_VALUE:number = 16;
-
-let SIZE_METABOLISM:number = 1;
-let STRENGTH_METABOLISM:number = 1;
-let SPEED_METABOLISM:number = 1;
-let SENSES_METABOLISM:number = 1;
-
-let STOMACHSIZE_FACTOR:number = 5;
-
-let BITESIZE_FACTOR:number = 5;
-
-let WALKINGCOST_CONSTANT = 1;
-let WALKINGCOST_SIZE_FACTOR:number = 1;
-let WALKINGCOST_SPEED_MAX_REDUCTION:number = .5;
-
-let ATTACKDAMAGE_FACTOR = 1;
-
-export class Attributes{
-    size:number;
-    strength:number;
-    speed:number;
-    senses:number;
-
-    //related to size and maybe speed and strength?
-    metabolism:number;      //Passive energy usage. Drained each tick increases with size, strength, speed, and senses.
-    stomachSize:number;     //Amount of food possible to store
-    biteSize:number;        //how much food they get per bite
-    walkingCost:number;     //how much food is drained when walking. increases with size and decreases with speed.
-    attackDamage:number;
-    moveCooldown:number;
-
-    constructor(size:number, strength:number, speed:number, senses:number){
-        this.size = size;
-        this.strength = strength;
-        this.speed = speed;
-        this.senses = senses;
-
-        this.metabolism = size * SIZE_METABOLISM + strength * STRENGTH_METABOLISM + speed * SPEED_METABOLISM + senses * SENSES_METABOLISM;
-        this.stomachSize = size * STOMACHSIZE_FACTOR;
-        this.biteSize = size * BITESIZE_FACTOR;
-        this.walkingCost = (WALKINGCOST_CONSTANT + size * WALKINGCOST_SIZE_FACTOR) * (2 * MAX_ATTRIBUTE_VALUE - speed)/(MAX_ATTRIBUTE_VALUE/WALKINGCOST_SPEED_MAX_REDUCTION);
-        //Speed related reduction in walking cost rules if 16 = max and max reduction = 0.5: 1 -> 1 & 16 -> 0.5 16/32 = 0.5 ==>  f(x) = (32 - x)/32. Solves it close enough. I know this function gives the result of one when x = 0 but i don't care.
-        this.attackDamage = size + strength * ATTACKDAMAGE_FACTOR;
-        this.moveCooldown = MAX_ATTRIBUTE_VALUE - speed;
-    }
-}
 
 export class Species{
     tint:Color;
@@ -82,20 +37,18 @@ export class Species{
  */
 export class Creature extends GameObject{//Placeholder än så länge
     
-    attributes:Attributes;
-    species:Species;
+    readonly attributes:Attributes;
+    readonly species:Species;
+    readonly ai:AI;
 
+    readonly maxEnergy:number;
+    readonly maxHealth:number;
+    
     currentEnergy:number;
-    maxEnergy:number;
-
     currentHealth:number;
-    maxHealth:number;
 
     moveCooldown:number = 0; //number of ticks until it can move
     attackCooldown:number = 0; //independent from movement cooldown but resets to same value
-    ai:AI;
-
-
 
     constructor(position:Vector2, species:Species, attributes?:Attributes){
         super(position);
@@ -107,6 +60,12 @@ export class Creature extends GameObject{//Placeholder än så länge
         else{
             this.attributes = species.defaultAttributes;
         }
+
+        this.currentHealth = this.attributes.size;
+        this.maxHealth = this.attributes.size;
+
+        this.currentEnergy = this.attributes.stomachSize;
+        this.maxEnergy = this.attributes.stomachSize;
 
         this.ai = new AI();
     }

@@ -4,7 +4,8 @@ export var AgentActionTypes;
     AgentActionTypes[AgentActionTypes["none"] = 0] = "none";
     AgentActionTypes[AgentActionTypes["move"] = 1] = "move";
     AgentActionTypes[AgentActionTypes["attack"] = 2] = "attack";
-    AgentActionTypes[AgentActionTypes["mate"] = 3] = "mate";
+    AgentActionTypes[AgentActionTypes["eat"] = 3] = "eat";
+    AgentActionTypes[AgentActionTypes["mate"] = 4] = "mate";
 })(AgentActionTypes || (AgentActionTypes = {}));
 //Package of the chosen action and a direction
 export class AgentAction {

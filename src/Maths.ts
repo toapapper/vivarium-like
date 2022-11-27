@@ -49,8 +49,14 @@ export class Vector2{
         return new Vector2(this.x/n, this.y/n);
     }
 
+    equals(other:Vector2):boolean{
+        return other.x == this.x && other.y == this.y;
+    }
 }
 
+/**
+ * The positions are in the middle of this rectangle. Sorry, not sorry.
+ */
 export class Rectangle{
     static get one(): Rectangle{return new Rectangle(0,0,1,1); }
 
@@ -70,10 +76,15 @@ export class Rectangle{
     get top(): number{ return this.y - this.height/2; }
     get bottom(): number{ return this.y + this.height/2; }
 
+    set left(value:number){this.position.x = value + this.width/2;}
+    set top(value:number){this.position.y = value + this.height/2;}
+
     get topLeft(): Vector2{ return new Vector2(this.left, this.top); }
     get topRight(): Vector2{ return new Vector2(this.right, this.top); }
     get bottomLeft(): Vector2{ return new Vector2(this.left, this.bottom); }
     get bottomRight(): Vector2{ return new Vector2(this.right, this.bottom); }
+
+    set topLeft(value:Vector2){this.position = value.add(this.size.multiply(0.5));}
 
     get points(): Vector2[]{ return [this.topLeft, this.topRight, this.bottomLeft, this.bottomRight]; }
 

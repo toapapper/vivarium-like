@@ -43,7 +43,7 @@ export class Camera {
         let _this = this;
         this.drawCalls.forEach(function (drawCall) {
             drawCall.rect = _this.WorldToViewportRect(drawCall.rect);
-            _this.context.drawImage(drawCall.img, drawCall.rect.left + _this.canvas.left, drawCall.rect.top + _this.canvas.top, drawCall.rect.width, drawCall.rect.height);
+            _this.context.drawImage(drawCall.img, drawCall.rect.left, drawCall.rect.top, drawCall.rect.width, drawCall.rect.height);
         });
         this.drawCalls = [];
     }
@@ -61,6 +61,7 @@ export class Camera {
         let outRect = new Rectangle(0, 0, 0, 0);
         outRect.position = this.WorldToViewportPoint(rect.position);
         outRect.size = rect.size.multiply(this.scale);
+        outRect.position = outRect.position.add(this.canvas.topLeft);
         return outRect;
     }
     /** world to pixel viewport position */
@@ -76,7 +77,7 @@ export class Camera {
      */
     ViewportToWorldPoint(viewportPoint) {
         let outVector = viewportPoint.subtract(this.canvas.size.divide(2));
-        //outVector = viewportPoint.multiply(this.viewport.x / this.resolution.x);
+        outVector = outVector.subtract(this.canvas.topLeft);
         outVector = outVector.divide(this.scale);
         outVector = outVector.add(this.viewport.position);
         return outVector;

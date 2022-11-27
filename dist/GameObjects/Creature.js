@@ -8,32 +8,6 @@ export var FoodType;
     FoodType[FoodType["omnivore"] = 1] = "omnivore";
     FoodType[FoodType["carnivore"] = 2] = "carnivore";
 })(FoodType || (FoodType = {}));
-let MAX_ATTRIBUTE_VALUE = 16;
-let SIZE_METABOLISM = 1;
-let STRENGTH_METABOLISM = 1;
-let SPEED_METABOLISM = 1;
-let SENSES_METABOLISM = 1;
-let STOMACHSIZE_FACTOR = 5;
-let BITESIZE_FACTOR = 5;
-let WALKINGCOST_CONSTANT = 1;
-let WALKINGCOST_SIZE_FACTOR = 1;
-let WALKINGCOST_SPEED_MAX_REDUCTION = .5;
-let ATTACKDAMAGE_FACTOR = 1;
-export class Attributes {
-    constructor(size, strength, speed, senses) {
-        this.size = size;
-        this.strength = strength;
-        this.speed = speed;
-        this.senses = senses;
-        this.metabolism = size * SIZE_METABOLISM + strength * STRENGTH_METABOLISM + speed * SPEED_METABOLISM + senses * SENSES_METABOLISM;
-        this.stomachSize = size * STOMACHSIZE_FACTOR;
-        this.biteSize = size * BITESIZE_FACTOR;
-        this.walkingCost = (WALKINGCOST_CONSTANT + size * WALKINGCOST_SIZE_FACTOR) * (2 * MAX_ATTRIBUTE_VALUE - speed) / (MAX_ATTRIBUTE_VALUE / WALKINGCOST_SPEED_MAX_REDUCTION);
-        //Speed related reduction in walking cost rules if 16 = max and max reduction = 0.5: 1 -> 1 & 16 -> 0.5 16/32 = 0.5 ==>  f(x) = (32 - x)/32. Solves it close enough. I know this function gives the result of one when x = 0 but i don't care.
-        this.attackDamage = size + strength * ATTACKDAMAGE_FACTOR;
-        this.moveCooldown = MAX_ATTRIBUTE_VALUE - speed;
-    }
-}
 export class Species {
     constructor(name, tint, sprite, foodType, attributes, defaultBehaviour) {
         this.sprite = ColorWhites(sprite, tint);
@@ -60,6 +34,10 @@ export class Creature extends GameObject {
         else {
             this.attributes = species.defaultAttributes;
         }
+        this.currentHealth = this.attributes.size;
+        this.maxHealth = this.attributes.size;
+        this.currentEnergy = this.attributes.stomachSize;
+        this.maxEnergy = this.attributes.stomachSize;
         this.ai = new AI();
     }
     //Each tick

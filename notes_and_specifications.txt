@@ -26,4 +26,5 @@ resten av siffrorna i seeden kan sedan användas till en slags slumpgenerator f�
 Kanske finns några algoritmer för att skapa prickiga/randiga, eller liknande, mönster.
 
 
-Försök sätta en riktlinje för hur långt ett naturligt liv är i spelet. T.ex. ett djur som lever upp till 15 år, typ en hund, kanske bör leva sin livstid 15 minuter i spelet. Under den livstiden ska den i snitt ha kunnat föröka sig ett visst antal gånger, och behövt jaga och döda ett visst antal andra djur. etc...
+Försök sätta en riktlinje för hur långt ett naturligt liv är i spelet. T.ex. ett djur som lever upp till 15 år, typ en hund, kanske bör leva sin livstid 15 minuter i spelet. 
+Under den livstiden ska den i snitt ha kunnat föröka sig ett visst antal gånger, och behövt jaga och döda ett visst antal andra djur. etc...

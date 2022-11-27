@@ -5,6 +5,7 @@ export enum AgentActionTypes{
     none,
     move,
     attack,
+    eat,
     mate
 }
 

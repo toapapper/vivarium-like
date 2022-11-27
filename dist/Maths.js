@@ -35,7 +35,13 @@ export class Vector2 {
     divide(n) {
         return new Vector2(this.x / n, this.y / n);
     }
+    equals(other) {
+        return other.x == this.x && other.y == this.y;
+    }
 }
+/**
+ * The positions are in the middle of this rectangle. Sorry, not sorry.
+ */
 export class Rectangle {
     constructor(x, y, width, height) {
         this.x = x;
@@ -52,10 +58,13 @@ export class Rectangle {
     get right() { return this.x + this.width / 2; }
     get top() { return this.y - this.height / 2; }
     get bottom() { return this.y + this.height / 2; }
+    set left(value) { this.position.x = value + this.width / 2; }
+    set top(value) { this.position.y = value + this.height / 2; }
     get topLeft() { return new Vector2(this.left, this.top); }
     get topRight() { return new Vector2(this.right, this.top); }
     get bottomLeft() { return new Vector2(this.left, this.bottom); }
     get bottomRight() { return new Vector2(this.right, this.bottom); }
+    set topLeft(value) { this.position = value.add(this.size.multiply(0.5)); }
     get points() { return [this.topLeft, this.topRight, this.bottomLeft, this.bottomRight]; }
     //inclusive contain (two equal rects would contain each other)
     containsPoint(point) {

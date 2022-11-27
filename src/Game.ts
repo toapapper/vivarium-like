@@ -1,15 +1,19 @@
 import { Camera } from "./Camera.js";
 import { Vector2, Rectangle } from "./Maths.js";
 import { Color, ColorWhites } from "./ImageUtils.js"
-import { Creature, Species, FoodType, Attributes } from "./GameObjects/Creature.js";
+import { Creature, Species, FoodType } from "./GameObjects/Creature.js";
+import { Attributes } from "./GameObjects/Attributes.js"
 import { World } from "./World.js";
-import { NoiseMapGenerator } from "./Noise.js";
 import { Tile } from "./Tile.js";
+import { UI_Manager } from "./UI/UI_Manager.js";
 
 let canvas: HTMLCanvasElement = document.getElementById("GameCanvas") as HTMLCanvasElement;
 let context: CanvasRenderingContext2D = canvas.getContext("2d");
 
-let camera = new Camera(context, new Rectangle(400, 400, 800, 800));
+let cameraRect:Rectangle = Rectangle.one;
+cameraRect.size = new Vector2(800,800);
+cameraRect.topLeft = new Vector2(0,0);
+let camera = new Camera(context, cameraRect);
 
 context.fillStyle = "#ffffff";
 context.imageSmoothingEnabled = false;
@@ -29,16 +33,21 @@ let world:World = new World(new Vector2(100,100));
 world.GenerateNew();
 camera.Move(world.size.multiply(.5));
 
+let uiManager:UI_Manager = new UI_Manager();
 
 
-let TickInterval:number = 16;
+let TickInterval:number = 100;
 
 setInterval(function(){
     world.Draw(camera);
-    world.Update();
+    //world.Update();
     camera.Render();
-}, TickInterval);
+    uiManager.draw(context);
+}, 16);
 
+setInterval(function(){
+    world.Update();
+}, TickInterval)
 
 document.addEventListener("click", function(event:MouseEvent){
 
@@ -53,6 +62,7 @@ document.addEventListener("click", function(event:MouseEvent){
 
         let testCreature = new Creature(tile.position, testSpecies, new Attributes(10,10,2,10));
         world.SpawnGameObject(testCreature.position, testCreature);
+        uiManager.addCreature(testCreature);
     }
 
 });
