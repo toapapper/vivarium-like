@@ -1,3 +1,23 @@
+export function sign(value:number):number{
+    if(value > 0){
+        return 1;
+    }
+    else if(value < 0){
+        return -1;
+    }
+    else{
+        return 0;
+    }
+}
+
+export function absolute(value:number):number{
+    if(value < 0){
+        return value * -1;
+    }
+    
+    return value;
+}
+
 export class Vector2{
     static get zero(): Vector2{ return new Vector2(0, 0); }
     static get one(): Vector2{ return new Vector2(1,1); }
@@ -33,6 +53,10 @@ export class Vector2{
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
+    lengthsqr():number{
+        return this.x * this.x + this.y * this.y;
+    }
+
     add(other: Vector2): Vector2{
         return new Vector2(other.x + this.x, other.y + this.y);
     }
@@ -51,6 +75,10 @@ export class Vector2{
 
     equals(other:Vector2):boolean{
         return other.x == this.x && other.y == this.y;
+    }
+
+    withinOne(other:Vector2):boolean{
+        return this.subtract(other).lengthsqr() <= 1.4; //Made to compare tile-positions. Does not count if diagonally within one. Thats why 1.4 as thats slightly less than the distance to a diagonal tile.
     }
 }
 

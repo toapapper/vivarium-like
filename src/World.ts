@@ -3,7 +3,8 @@ import { Rectangle, Vector2 } from "./Maths.js";
 import { NoiseMapGenerator } from "./Noise.js";
 import { Tile } from "./Tile.js";
 import { Creature } from "./GameObjects/Creature.js";
-import { GameObject, Mountain } from "./GameObjects/GameObject.js";
+import { Edible, GameObject, Mountain } from "./GameObjects/GameObject.js";
+import { LinkedList } from "./DataStructures/LinkedList.js";
 
 
 export class World{
@@ -17,6 +18,10 @@ export class World{
 
     tiles:Tile[][]; // [x][y]
     gameObjects:GameObject[] = [];
+    creatures:LinkedList<Creature>;
+    apples:LinkedList<Edible>;
+    corpses:LinkedList<Edible>;
+
     size:Vector2;
 
     constructor(size:Vector2){
@@ -88,6 +93,7 @@ export class World{
         return undefined;
     }
 
+
     SpawnGameObject(position:Vector2, gObject:GameObject){
         //find nearest unoccupied position to place an item.
         //TODO:implement better
@@ -98,9 +104,22 @@ export class World{
 
 
         if(!this.tiles[position.intX][position.intY].occupied){
+
             this.gameObjects.push(gObject);
             this.tiles[position.intX][position.intY].occupied = true;
             this.tiles[position.intX][position.intY].occupiedBy = gObject;
+
+            if(gObject instanceof Creature){
+                this.creatures.push_back(gObject as Creature);
+            }
+            else if(gObject instanceof Edible){
+                if((gObject as Edible).isApple()){
+                    this.apples.push_back(gObject as Edible);
+                }
+                else{
+                    this.corpses.push_back(gObject as Edible);
+                }
+            }
         }
     }
 
@@ -125,6 +144,18 @@ export class World{
             });
 
             this.gameObjects = nArray;
+        }
+
+        if(gameObject instanceof Creature){
+            this.creatures.remove(gameObject as Creature);
+        }
+        else if(gameObject instanceof Edible){
+            if((gameObject as Edible).isApple()){
+                this.apples.remove(gameObject as Edible);
+            }
+            else{
+                this.corpses.remove(gameObject as Edible);
+            }
         }
 
     }

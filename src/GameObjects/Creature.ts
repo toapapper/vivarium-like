@@ -1,4 +1,4 @@
-import { Rectangle, Vector2 } from "../Maths.js";
+import { absolute, Rectangle, sign, Vector2 } from "../Maths.js";
 import { Color, ColorWhites } from "../ImageUtils.js";
 import { Camera } from "../Camera.js";
 import { GameObject, Edible} from "./GameObject.js";
@@ -67,7 +67,7 @@ export class Creature extends GameObject{//Placeholder än så länge
         this.currentEnergy = this.attributes.stomachSize;
         this.maxEnergy = this.attributes.stomachSize;
 
-        this.ai = new AI();
+        this.ai = new AI(this);
     }
 
     //Each tick
@@ -80,10 +80,10 @@ export class Creature extends GameObject{//Placeholder än så länge
                     this.Move(action.direction);
                     break;
                 case AgentActionTypes.attack:
-                    this.Attack(action.target);
+                    this.Attack(action.targetCreature);
                     break;
                 case AgentActionTypes.mate:
-                    this.Mate(action.target);
+                    this.Mate(action.targetCreature);
                     break;
             }
             this.moveCooldown = this.attributes.moveCooldown;
@@ -112,6 +112,16 @@ export class Creature extends GameObject{//Placeholder än så länge
             return;
         }
 
+        //limit to 1 and in one direction
+        if(absolute(direction.x) >= 0){
+            direction.x = sign(direction.x);
+            direction.y = 0;
+        }
+        else {
+            direction.x = 0;
+            direction.y = sign(direction.y);
+        }
+
         let newPos:Vector2 = this.position.add(direction);
         let world:World = World.Instance;
         let newTile:Tile = world.GetTileAt(newPos);
@@ -126,7 +136,7 @@ export class Creature extends GameObject{//Placeholder än så länge
         newTile.occupiedBy = this;
 
         this.position = newPos;
-        this.currentEnergy -= this.attributes.walkingCost;
+        this.currentEnergy -= this.attributes.walkingCost; //Might be unnecessary
     }
 
     Attack(target:Creature):void{
@@ -163,7 +173,7 @@ export class Creature extends GameObject{//Placeholder än så länge
 
     /** Happens every time it should move  */
     GetAgentAction(): AgentAction {
-        return this.ai.solve();
+        return this.ai.think();
     }
 
 }

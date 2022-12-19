@@ -60,6 +60,14 @@ export class LinkedList<T>{
         this.front.insert_before(new Node<T>(value));
     }
 
+    remove(item:T){
+        this.forEach((node)=>{
+            if(node.value === item){
+                node.erase();
+            }
+        });
+    }
+
     forEach(action: (node:Node<T>) => void){
         let currentNode:Node<T> = this.front;
         while(currentNode !== this.head){
